@@ -15,7 +15,7 @@ server:
 client:
 	mkdir -p install
 	$(CC) $(CFLAGS) -shared -o install/client1.so src/player.c
-
+	$(CC) $(CFLAGS) -shared -o install/client2.so src/player.c
 alltests:
 
 test: alltests
