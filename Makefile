@@ -7,12 +7,13 @@ CC = gcc
 
 all: build
 
-build: server client
+build: client server
 
 server:
 	$(CC) $(CFLAGS) -o install/server src/server.c -ldl
 
 client:
+	mkdir -p install
 	$(CC) $(CFLAGS) -shared -o install/client1.so src/player.c
 
 alltests:
