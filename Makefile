@@ -16,13 +16,18 @@ client:
 	mkdir -p install
 	$(CC) $(CFLAGS) -shared -o install/client1.so src/player.c
 	$(CC) $(CFLAGS) -shared -o install/client2.so src/player.c
+
 alltests:
+	$(CC) $(CFLAGS) -o install/alltests tst/test.c -ldl
 
 test: alltests
+
+runtest: test
+	./install/alltests
 
 install: server client test
 
 clean:
-	@rm -f *~ src/*~
+	@rm -f *~ src/*~ tst/*~
 
 .PHONY: client install test clean
