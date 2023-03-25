@@ -18,7 +18,7 @@ client:
 	$(CC) $(CFLAGS) -shared -o install/client2.so src/player.c
 
 alltests:
-	$(CC) $(CFLAGS) -o install/alltests tst/test.c -ldl
+	$(CC) $(CFLAGS) -o  install/alltests tst/test.c -ldl -lgcov
 
 test: alltests
 
