@@ -28,6 +28,6 @@ runtest: test
 install: server client test
 
 clean:
-	@rm -f *~ src/*~ tst/*~
+	@rm -f *~ src/*~ tst/*~ install/*
 
 .PHONY: client install test clean
