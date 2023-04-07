@@ -3,13 +3,13 @@
 #include <stdlib.h>
 #include <getopt.h>
 #include <string.h>
-
+#include "tools.h"
 #include "world.h"
 
 int main(int argc, char* argv[])
 {
-    printf("[-] Server running");
-
+    printf("[-] Server running\n");
+    /*
     void *handle;
 
     handle = dlopen("./install/client1.so", RTLD_LAZY);
@@ -42,8 +42,12 @@ int main(int argc, char* argv[])
 	break;
       }
     }
-
+    */
+    int width = 3;
+    enum type_world w_type = SQUARED; 
     struct graph_t g = {width*width, world_init(width, w_type)};
-    
+
+    print_gsl_spmatrix_uint(g.t);
+    free(g.t);
     return EXIT_SUCCESS;
 }
