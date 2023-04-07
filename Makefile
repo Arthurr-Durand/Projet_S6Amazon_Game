@@ -25,6 +25,9 @@ test: alltests
 runtest: test
 	./install/alltests
 
+runserver: build
+	./install/server
+
 install: server client test
 
 clean:
