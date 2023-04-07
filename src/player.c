@@ -1,22 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "player.h"
 
 struct player_data {
     unsigned int id;
     struct graph_t* graph;
     unsigned int num_queens;
-    unsigned int* queens[NUM_PLAYERS]; 
+    unsigned int* queens[NUM_PLAYERS];
 };
 
 static struct player_data data;
-char const *get_player_name()
+
+char const* get_player_name()
 {
-    const char *bot = "BOTTES de Anton";
+    const char* bot = "BOTTES de Anton";
     return bot;
 }
 
-void initialize(unsigned int player_id, struct graph_t* graph, unsigned int num_queens, unsigned int* queens[NUM_PLAYERS])
+void initialize(unsigned int player_id, struct graph_t *graph, unsigned int num_queens, unsigned int *queens[NUM_PLAYERS])
 {
     data.id = player_id;
     data.graph = graph;
