@@ -10,7 +10,7 @@ all: build
 build: client server
 
 server:
-	$(CC) $(CFLAGS) -o install/server src/server.c -ldl
+	$(CC) $(CFLAGS) -o install/server src/server.c src/world.c src/tools.c $(LDFLAGS)
 
 client:
 	mkdir -p install
@@ -18,12 +18,15 @@ client:
 	$(CC) $(CFLAGS) -shared -o install/client2.so src/player.c
 
 alltests:
-	$(CC) $(CFLAGS) -o  install/alltests tst/test.c -ldl --coverage -lgcov
+	$(CC) $(CFLAGS) -o  install/alltests tst/test.c $(LDFLAGS) --coverage -lgcov
 
 test: alltests
 
 runtest: test
 	./install/alltests
+
+runserver: build
+	./install/server
 
 install: server client test
 
