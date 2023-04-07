@@ -1,4 +1,4 @@
-GSL_PATH ?= /home/kali/.local/dev/gsl/install
+GSL_PATH ?= /net/ens/renault/save/gsl-2.6/install
 CFLAGS = -std=c99 -Wall -Wextra -fPIC -g3 -I$(GSL_PATH)/include
 LDFLAGS = -lm -lgsl -lgslcblas -ldl \
 	-L$(GSL_PATH)/lib -L$(GSL_PATH)/lib64 \
@@ -10,7 +10,7 @@ all: build
 build: client server
 
 server:
-	$(CC) $(CFLAGS) -o install/server src/server.c -ldl
+	$(CC) $(CFLAGS) -o install/server src/server.c $(LDFLAGS)
 
 client:
 	mkdir -p install
@@ -24,6 +24,9 @@ test: alltests
 
 runtest: test
 	./install/alltests
+
+run: all
+	./install/server ./install/client1.so ./install/client2.so
 
 install: server client test
 
