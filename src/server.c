@@ -45,7 +45,8 @@ int main(int argc, char* argv[])
     struct graph_t g = { width * width, world_init(width, w_type) };
 
     print_gsl_spmatrix_uint(g.t);
-    free(g.t);
+    
+    gsl_spmatrix_uint_free(g.t);
 
     dlclose(handle);
 
