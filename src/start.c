@@ -14,22 +14,24 @@ int get_rand_queen(int queen_number)
 
 
 unsigned int tiiiiiir(unsigned int pos){
-
-    while(rand()%sqrt(data.graph->num_vertices) && break != 0){
+    unsigned int dir=(rand()%8)+1;
+    while((rand()%sqrt(data.graph->num_vertices)) && (stop != 0)){
             unsigned int k = data.graph->p[pos];
             //for (unsigned int k = data.graph->p[ligne]; k < data.graph->p[ligne+1] ; k++)  
-                while ((data.graph->ligne[k] != j) && (break!=0)){
+                while ((data.graph->ligne[k] != dir) && (stop!=0)){
                     if(k >= (data.graph->p[pos+1])){
-                        break = 0;
+                        stop = 0;
                     }
                     k++;
                 }
                 if (pas possible){
-                    break = 0;
+                    stop = 0;
                 }
          
             pos = k ;  
+ 
         }
+    return k;
 }
 
 
@@ -39,23 +41,25 @@ struct move_t get_rand_move(void)
     unsigned int ligne = data.quenns[data.id][rand()%data.num_queens];
     next_move.queen_src= ligne;
     unsigned int dir = data.graph->ligne[data.graph->p[ligne]];
-        while(rand()%sqrt(data.graph->num_vertices) && break != 0){
+    int stop=1;
+        while(rand()%sqrt(data.graph->num_vertices) && (stop != 0)){
             unsigned int k = data.graph->p[ligne];
             //for (unsigned int k = data.graph->p[ligne]; k < data.graph->p[ligne+1] ; k++)  
-                while ((data.graph->ligne[k] != j) && (break!=0)){
+                while ((data.graph->ligne[k] != dir) && (stop!=0)){
                     if(k >= (data.graph->p[ligne+1])){
-                        break = 0;
+                        stop = 0;
                     }
                     k++;
                 }
                 if (pas possible){  // depend de k
-                    break = 0;
+                    stop = 0;
                 }
          
             ligne = k ;  
         }
     next_move.queen_dst=ligne;
     next_move.arrow_dst= tiiiiiir(ligne);
+    return next_move;
 }
 
 
