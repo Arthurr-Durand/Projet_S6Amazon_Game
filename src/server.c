@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 
     int opt;
     enum type_world w_type = SQUARED;
-    unsigned int width = 8;
+    unsigned int width = 5;
 
     while ((opt = getopt(argc, argv, "m:t:")) != -1) {
         switch (opt) {
@@ -42,9 +42,13 @@ int main(int argc, char* argv[])
         }
     }
 
-    struct graph_t g = { width * width, world_init(width, w_type) };
+    struct graph_t g = { width * width, graph_init(width, w_type) };
 
-    print_gsl_spmatrix_uint(g.t);
+    struct world_t * w = world_init(width);
+    
+    print_world(w);
+
+    free_world(w);
     
     gsl_spmatrix_uint_free(g.t);
 
