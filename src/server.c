@@ -42,15 +42,24 @@ int main(int argc, char* argv[])
         }
     }
 
-    struct graph_t g = { width * width, graph_init(width, w_type) };
+    struct graph_t graph = { width * width, graph_init(width, w_type) };
 
-    struct world_t * w = world_init(width);
-    
-    print_world(w);
+    struct world_t * world = world_init(width);
 
-    free_world(w);
+    int num_queens = 4*(width/10 + 1);
+
+    unsigned int* queens[2];
+
+    queens[0] = malloc(sizeof(unsigned int) * num_queens);
+    queens[1] = malloc(sizeof(unsigned int) * num_queens);
+
+    compute_queens_pos(width, world, num_queens, queens);
+
+    free_world(world);
+
+    free_queens(queens);
     
-    gsl_spmatrix_uint_free(g.t);
+    gsl_spmatrix_uint_free(graph.t);
 
     dlclose(handle);
 

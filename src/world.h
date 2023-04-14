@@ -31,5 +31,6 @@ void free_world(struct world_t * world);
 
 void print_world(struct world_t * world);
 
+void compute_queens_pos(int m, struct world_t* world, int num_queens, unsigned int* queens[]);
 
-
+void free_queens(unsigned int* queens[]);
