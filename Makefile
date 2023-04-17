@@ -14,8 +14,8 @@ server:
 
 client:
 	mkdir -p install
-	$(CC) $(CFLAGS) -shared -o install/client1.so src/player.c
-	$(CC) $(CFLAGS) -shared -o install/client2.so src/player.c
+	$(CC) $(CFLAGS) -shared -o install/client1.so src/player_1.c
+	$(CC) $(CFLAGS) -shared -o install/client2.so src/player_2.c
 
 alltests:
 	$(CC) $(CFLAGS) -o  install/alltests tst/test_client1.c $(LDFLAGS) -I src/ -ldl --coverage -lgcov
