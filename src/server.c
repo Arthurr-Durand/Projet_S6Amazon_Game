@@ -3,78 +3,101 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include "world.h"
 #include "tools.h"
+
+enum player_color {
+  BLACK = 0,
+  WHITE = 1,
+  NB_COLORS = 2,
+};
+
+struct player {
+  char const* (*get_player_name)(void);
+  void (*initialize)(unsigned int, struct graph_t*, unsigned int, unsigned int*);
+  struct move_t (*play)(struct move_t);
+  void (*finalize)(void);
+  enum player_color color;
+};
+
+char const* start_player(char const* player_1, char const* player_2) {
+  if (rand() % 2 == 0)
+    return player_1;
+  return player_2;
+}
 
 int main(int argc, char* argv[])
 {
     printf("[-] Server running\n");
 
-    void* iencly;
-    char const* (*get_player_name_1)(void);
+    void* player_1;
+    struct player iencly;
+    /*char const* (*get_player_name_1)(void);
     void (*initialize_1)(unsigned int, struct graph_t*, unsigned int, unsigned int*);
     struct move_t (*play_1)(struct move_t);
-    void (*finalize_1)(void);
+    void (*finalize_1)(void);*/
     
-    void* internet;
-    char const* (*get_player_name_2)(void);
+    void* player_2;
+    struct player internet;
+    /*char const* (*get_player_name_2)(void);
     void (*initialize_2)(unsigned int, struct graph_t*, unsigned int, unsigned int*);
     struct move_t (*play_2)(struct move_t);
-    void (*finalize_2)(void);
+    void (*finalize_2)(void);*/
 
     char *error;
 
-    iencly = dlopen("./install/client1.so", RTLD_LAZY);
-    if (!iencly) {
+    player_1 = dlopen("./install/client1.so", RTLD_LAZY);
+    if (!player_1) {
         fputs(dlerror(), stderr);
         exit(1);
     }
 
-    internet = dlopen("./install/client2.so", RTLD_LAZY);
-    if (!iencly) {
+    player_2 = dlopen("./install/client2.so", RTLD_LAZY);
+    if (!player_1) {
         fputs(dlerror(), stderr);
         exit(1);
     }
     
-    get_player_name_1 = dlsym(iencly, "get_player_name" );
+    iencly.get_player_name = dlsym(player_1, "get_player_name" );
     if ((error = dlerror()) != NULL)  {
       fputs(error, stderr);
       exit(1);
     }
-    initialize_1 = dlsym(iencly, "initialize" );
+    iencly.initialize = dlsym(player_1, "initialize" );
     if ((error = dlerror()) != NULL)  {
       fputs(error, stderr);
       exit(1);
     }
-    //play_1 = dlsym(iencly, "play");
+    //iencly.play = dlsym(player_1, "play");
     if ((error = dlerror()) != NULL)  {
       fputs(error, stderr);
       exit(1);
     }
-    finalize_1 = dlsym(iencly, "finalize");
+    iencly.finalize = dlsym(player_1, "finalize");
     if ((error = dlerror()) != NULL)  {
       fputs(error, stderr);
       exit(1);
     }
 
     
-    get_player_name_2 = dlsym(internet, "get_player_name" );
+    internet.get_player_name = dlsym(player_2, "get_player_name" );
     if ((error = dlerror()) != NULL)  {
       fputs(error, stderr);
       exit(1);
     }
-    initialize_2 = dlsym(internet, "initialize" );
+    internet.initialize = dlsym(player_2, "initialize" );
     if ((error = dlerror()) != NULL)  {
       fputs(error, stderr);
       exit(1);
     }
-    //play_2 = dlsym(internet, "play");
+    //internet.play = dlsym(player_2, "play");
     if ((error = dlerror()) != NULL)  {
       fputs(error, stderr);
       exit(1);
     }
-    finalize_2 = dlsym(internet, "finalize");
+    internet.finalize = dlsym(player_2, "finalize");
     if ((error = dlerror()) != NULL)  {
       fputs(error, stderr);
       exit(1);
@@ -102,12 +125,12 @@ int main(int argc, char* argv[])
         }
     }
 
-    char const* player_1 = get_player_name_1();
+    srand(time(NULL));
 
-    char const* player_2 = get_player_name_2();
+    char const* first_player = start_player(iencly.get_player_name(), internet.get_player_name());
 
-    printf("%s\n", player_1);
-    printf("%s\n", player_2);
+    iencly.color = (iencly.get_player_name() == first_player) ? BLACK : WHITE;
+    internet.color = (internet.get_player_name() == first_player) ? BLACK : WHITE;
 
     struct graph_t graph = { width * width, graph_init(width, w_type) };
 
@@ -128,9 +151,9 @@ int main(int argc, char* argv[])
     
     gsl_spmatrix_uint_free(graph.t);
 
-    dlclose(iencly);
+    dlclose(player_1);
 
-    dlclose(internet);
+    dlclose(player_2);
 
     return EXIT_SUCCESS;
 }
