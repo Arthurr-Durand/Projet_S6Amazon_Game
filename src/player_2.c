@@ -33,8 +33,8 @@ void initialize(unsigned int player_id, struct graph_t* graph, unsigned int num_
     }
 
     data.graph = malloc(sizeof(struct graph_t));
-    data.graph->num_vertices = graph->t->size1 * graph->t->size2;
-    gsl_spmatrix_uint *tmp = gsl_spmatrix_uint_alloc(graph->t->size1, graph->t->size2);
+    data.graph->num_vertices = graph->num_vertices;
+    gsl_spmatrix_uint *tmp = gsl_spmatrix_uint_alloc(data.graph->num_vertices, data.graph->num_vertices);
     data.graph->t = gsl_spmatrix_uint_compress(tmp, GSL_SPMATRIX_CSR);
     gsl_spmatrix_uint_memcpy(data.graph->t, graph->t);
     gsl_spmatrix_uint_free(tmp);
