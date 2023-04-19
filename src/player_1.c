@@ -29,13 +29,15 @@ void initialize(unsigned int player_id, struct graph_t* graph, unsigned int num_
     for (unsigned int p = 0; p < NUM_PLAYERS; p++) {
         data.queens[p] = (unsigned int*)malloc(sizeof(unsigned int) * data.num_queens);
         for (unsigned int q = 0; q < data.num_queens; q++)
-	    data.queens[p][q] = queens[p][q];
+            data.queens[p][q] = queens[p][q];
     }
 
     data.graph = malloc(sizeof(struct graph_t));
-    data.graph->num_vertices = graph->num_vertices;
-    data.graph->t = gsl_spmatrix_uint_compress(gsl_spmatrix_uint_alloc(graph->num_vertices, graph->num_vertices), GSL_SPMATRIX_CSR);
+    data.graph->num_vertices = graph->t->size1 * graph->t->size2;
+    gsl_spmatrix_uint *tmp = gsl_spmatrix_uint_alloc(graph->t->size1, graph->t->size2);
+    data.graph->t = gsl_spmatrix_uint_compress(tmp, GSL_SPMATRIX_CSR);
     gsl_spmatrix_uint_memcpy(data.graph->t, graph->t);
+    gsl_spmatrix_uint_free(tmp);
 }
 
 void finalize()

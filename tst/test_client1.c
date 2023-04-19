@@ -23,15 +23,15 @@ void test_initialize(void (*initialize)())
 
     struct graph_t* graph = malloc(sizeof(struct graph_t));
     graph->num_vertices = 2;
-    graph->t = gsl_spmatrix_uint_alloc(3, 3);
+    gsl_spmatrix_uint *tmp = gsl_spmatrix_uint_alloc(3, 3);
+    graph->t = gsl_spmatrix_uint_compress(tmp, GSL_SPMATRIX_CSR);
+    gsl_spmatrix_uint_free(tmp);
 
     unsigned int num_queens = 1;
 
     unsigned int* queens[NUM_PLAYERS];
     for (unsigned int i = 0; i < NUM_PLAYERS; i++)
         queens[i] = (unsigned int*)malloc(sizeof(unsigned int));
-    queens[0][0] = 1;
-    queens[1][0] = 7;
 
     (*initialize)(player_id, graph, num_queens, queens);
 
