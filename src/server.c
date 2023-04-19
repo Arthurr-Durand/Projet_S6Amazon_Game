@@ -36,31 +36,19 @@ struct player* compute_next_player(struct moves_t* moves, struct player* player_
 
 int main(int argc, char* argv[])
 {
-    printf("[-] Server running\n");
+    printf("[-] Server running\n\n");
 
     void* player_1;
     struct player iencly;
-    /*char const* (*get_player_name_1)(void);
-    void (*initialize_1)(unsigned int, struct graph_t*, unsigned int, unsigned int*);
-    struct move_t (*play_1)(struct move_t);
-    void (*finalize_1)(void);*/
     
     void* player_2;
     struct player internet;
-    /*char const* (*get_player_name_2)(void);
-    void (*initialize_2)(unsigned int, struct graph_t*, unsigned int, unsigned int*);
-    struct move_t (*play_2)(struct move_t);
-    void (*finalize_2)(void);*/
 
     char *error;
 
+    printf("[-] Client 1 loading\n");
+    
     player_1 = dlopen("./install/client1.so", RTLD_LAZY);
-    if (!player_1) {
-        fputs(dlerror(), stderr);
-        exit(1);
-    }
-
-    player_2 = dlopen("./install/client2.so", RTLD_LAZY);
     if (!player_1) {
         fputs(dlerror(), stderr);
         exit(1);
@@ -87,6 +75,15 @@ int main(int argc, char* argv[])
       exit(1);
     }
 
+    printf("[-] Client 1 successfully loaded\n\n");
+
+    printf("[-] Client 2 loading\n");
+    
+    player_2 = dlopen("./install/client2.so", RTLD_LAZY);
+    if (!player_1) {
+        fputs(dlerror(), stderr);
+        exit(1);
+    }
     
     internet.get_player_name = dlsym(player_2, "get_player_name" );
     if ((error = dlerror()) != NULL) {
@@ -108,6 +105,8 @@ int main(int argc, char* argv[])
       fputs(error, stderr);
       exit(1);
     }
+
+    printf("[-] Client 2 successfully loaded\n\n");
     
     int opt;
     enum type_world w_type = SQUARED;
