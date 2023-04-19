@@ -108,7 +108,7 @@ struct world_t * world_init(int width)  {
 }
 
 
-void compute_queens_pos(int m, struct world_t* world, int num_queens, unsigned int* queens[]) {
+unsigned int** compute_queens_pos(int m, struct world_t* world, int num_queens, unsigned int* queens[NUM_PLAYERS]) {
   //int test  = (m - (num_queens / 2)) / ((num_queens /2) + 1);
   
   for(int i = 0; i < num_queens / 4; i++) {
@@ -122,14 +122,16 @@ void compute_queens_pos(int m, struct world_t* world, int num_queens, unsigned i
     *queens[0] = (2 * i + 2) * m - 1;
     
     world->idx[m * m - m + 2 * i + 1] = 2;
-    *queens[0] = m * m - m + 2 * i + 1;
+    *queens[1] = m * m - m + 2 * i + 1;
     world->idx[m * m - m -  (2 * i + 1) * m] = 2;
-    *queens[0] = m * m - m -  (2 * i + 1) * m;
+    *queens[1] = m * m - m -  (2 * i + 1) * m;
     world->idx[m * m - 1 -  (2 * i + 1) * m] = 2;
-    *queens[0] = m * m - 1 -  (2 * i + 1) * m;
+    *queens[1] = m * m - 1 -  (2 * i + 1) * m;
     world->idx[m * m - 1 - (2 * i + 1 )] = 2;
-    *queens[0] = m * m - 1 - (2 * i + 1 );
+    *queens[1] = m * m - 1 - (2 * i + 1 );
   }
+
+  return queens;
 }
 
 /*
@@ -155,7 +157,6 @@ void print_world(struct world_t * world) {
 }
 
 void free_queens(unsigned int* queens[]) {
-  for(int i = 0; i < 2; i++) {
+  for(int i = 0; i < 2; i++)
       free(queens[i]);
-  }
 }
