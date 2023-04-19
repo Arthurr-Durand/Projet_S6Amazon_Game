@@ -32,8 +32,6 @@ void test_initialize(void (*initialize)())
     unsigned int* queens[NUM_PLAYERS];
     for (unsigned int i = 0; i < NUM_PLAYERS; i++)
         queens[i] = (unsigned int*)malloc(sizeof(unsigned int));
-    queens[0][0] = 1;
-    queens[1][0] = 7;
 
     (*initialize)(player_id, graph, num_queens, queens);
 
