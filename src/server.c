@@ -156,11 +156,9 @@ int main(int argc, char* argv[])
 
     struct player* current_player;
     // while (???)
-    for (int i = 0; i < 10; i++) {
-      current_player = compute_next_player(&moves, &iencly, &internet);
-      //move = current_player->play(move);
-      moves.current = (moves.current + 1) % NUM_PLAYERS;
-    }
+    current_player = compute_next_player(&moves, &iencly, &internet);
+    //move = current_player->play(move);
+    moves.current = (moves.current + 1) % NUM_PLAYERS;
     
     free_world(world);
     free_queens(queens);
