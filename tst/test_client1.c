@@ -5,6 +5,8 @@
 #include <string.h>
 
 #include "../src/graph.h"
+#include "../src/move.h"
+#include "../src/world.h"
 
 #define NUM_PLAYERS 2
 
@@ -21,24 +23,40 @@ void test_initialize(void (*initialize)())
 
     unsigned int player_id = 0;
 
-    struct graph_t* graph = malloc(sizeof(struct graph_t));
-    graph->num_vertices = 2;
-    gsl_spmatrix_uint *tmp = gsl_spmatrix_uint_alloc(3, 3);
-    graph->t = gsl_spmatrix_uint_compress(tmp, GSL_SPMATRIX_CSR);
-    gsl_spmatrix_uint_free(tmp);
+    int width = 3;
+    struct graph_t graph = { width * width, graph_init(width, SQUARED) };
 
-    unsigned int num_queens = 1;
+    unsigned int num_queens = 2;
 
     unsigned int* queens[NUM_PLAYERS];
     for (unsigned int i = 0; i < NUM_PLAYERS; i++)
-        queens[i] = (unsigned int*)malloc(sizeof(unsigned int));
+        queens[i] = (unsigned int*)malloc(sizeof(unsigned int) * num_queens);
 
-    (*initialize)(player_id, graph, num_queens, queens);
+    queens[0][0] = 0;
+    queens[0][1] = 2;
+    queens[1][0] = 6;
+    queens[1][1] = 8;
+
+    (*initialize)(player_id, &graph, num_queens, queens);
 
     for (unsigned int i = 0; i < NUM_PLAYERS; i++)
         free(queens[i]);
-    gsl_spmatrix_uint_free(graph->t);
-    free(graph);
+    gsl_spmatrix_uint_free(graph.t);
+
+    printf("\t\tOK\n");
+}
+
+void test_play(struct move_t (*play)())
+{
+    printf("\t%s", __func__);
+
+    struct move_t previous_move = { 0, 1, 2 };
+
+    struct move_t new_move1 = (*play)(previous_move);
+    printf("\nLOG : move from %d to %d.\n", new_move1.queen_src, new_move1.queen_dst);
+
+    struct move_t new_move2 = (*play)(previous_move);
+    printf("LOG : move from %d to %d.\n", new_move2.queen_src, new_move2.queen_dst);
 
     printf("\t\tOK\n");
 }
@@ -59,6 +77,7 @@ int main()
     void* client;
     char const* (*get_player_name)();
     void (*initialize)();
+    struct move_t (*play)();
     void (*finalize)();
     char* error;
 
@@ -80,6 +99,12 @@ int main()
         exit(1);
     }
 
+    play = dlsym(client, "play");
+    if ((error = dlerror()) != NULL) {
+        fputs(error, stderr);
+        exit(1);
+    }
+
     finalize = dlsym(client, "finalize");
     if ((error = dlerror()) != NULL) {
         fputs(error, stderr);
@@ -88,6 +113,7 @@ int main()
 
     test_get_player_name(get_player_name);
     test_initialize(initialize);
+    test_play(play);
     test_finalize(finalize);
 
     dlclose(client);
