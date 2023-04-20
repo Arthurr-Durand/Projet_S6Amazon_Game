@@ -31,57 +31,57 @@ gsl_spmatrix_uint* squared_graph(int m)
   for (int i = 0; i < width; i++) {
     if (i % m == 0) {
       if ((0 <= i) && (i <= m - 1)) {
-	gsl_spmatrix_uint_set(mat, i + 1, i, DIR_EAST);
-	gsl_spmatrix_uint_set(mat, i + m, i, DIR_SOUTH);
-	gsl_spmatrix_uint_set(mat, i + m + 1, i, DIR_SE);
+	gsl_spmatrix_uint_set(mat, i, i + 1, DIR_EAST);
+	gsl_spmatrix_uint_set(mat, i, i + m, DIR_SOUTH);
+	gsl_spmatrix_uint_set(mat, i, i + m + 1, DIR_SE);
       } else if ((width - m <= i) && (i <= width - 1)) {
-	gsl_spmatrix_uint_set(mat, i + 1, i, DIR_EAST);
-	gsl_spmatrix_uint_set(mat, i - m, i, DIR_NORTH);
-	gsl_spmatrix_uint_set(mat, i - m - 1, i, DIR_NE);
+	gsl_spmatrix_uint_set(mat, i, i + 1, DIR_EAST);
+	gsl_spmatrix_uint_set(mat, i, i - m, DIR_NORTH);
+	gsl_spmatrix_uint_set(mat, i, i - m - 1, DIR_NE);
       } else {
-	gsl_spmatrix_uint_set(mat, i + 1, i, DIR_EAST);
-	gsl_spmatrix_uint_set(mat, i + m, i, DIR_SOUTH);
-	gsl_spmatrix_uint_set(mat, i + m + 1, i, DIR_SE);
-	gsl_spmatrix_uint_set(mat, i - m, i, DIR_NORTH);
-	gsl_spmatrix_uint_set(mat, i - m + 1, i, DIR_NE);
+	gsl_spmatrix_uint_set(mat, i, i + 1, DIR_EAST);
+	gsl_spmatrix_uint_set(mat, i, i + m, DIR_SOUTH);
+	gsl_spmatrix_uint_set(mat, i, i + m + 1, DIR_SE);
+	gsl_spmatrix_uint_set(mat, i, i - m, DIR_NORTH);
+	gsl_spmatrix_uint_set(mat, i, i - m + 1, DIR_NE);
       }
     } else if (i % m == m - 1) {
       if ((0 <= i) && (i <= m - 1)) {
-	gsl_spmatrix_uint_set(mat, i - 1, i, DIR_WEST);
-	gsl_spmatrix_uint_set(mat, i + m, i, DIR_SOUTH);
-	gsl_spmatrix_uint_set(mat, i + m - 1, i, DIR_SW);
+	gsl_spmatrix_uint_set(mat, i, i - 1, DIR_WEST);
+	gsl_spmatrix_uint_set(mat, i, i + m, DIR_SOUTH);
+	gsl_spmatrix_uint_set(mat, i, i + m - 1, DIR_SW);
       } else if ((width - m <= i) && (i <= width - 1)) {
-	gsl_spmatrix_uint_set(mat, i - 1, i, DIR_WEST);
-	gsl_spmatrix_uint_set(mat, i - m, i, DIR_NORTH);
-	gsl_spmatrix_uint_set(mat, i - m - 1, i, DIR_NW);
+	gsl_spmatrix_uint_set(mat, i, i - 1, DIR_WEST);
+	gsl_spmatrix_uint_set(mat, i, i - m, DIR_NORTH);
+	gsl_spmatrix_uint_set(mat, i, i - m - 1, DIR_NW);
       } else {
-	gsl_spmatrix_uint_set(mat, i - 1, i, DIR_WEST);
-	gsl_spmatrix_uint_set(mat, i + m, i, DIR_SOUTH);
-	gsl_spmatrix_uint_set(mat, i + m - 1, i, DIR_SW);
-	gsl_spmatrix_uint_set(mat, i - m, i, DIR_NORTH);
-	gsl_spmatrix_uint_set(mat, i - m - 1, i, DIR_NW);
+	gsl_spmatrix_uint_set(mat, i, i - 1, DIR_WEST);
+	gsl_spmatrix_uint_set(mat, i, i + m, DIR_SOUTH);
+	gsl_spmatrix_uint_set(mat, i, i + m - 1, DIR_SW);
+	gsl_spmatrix_uint_set(mat, i, i - m, DIR_NORTH);
+	gsl_spmatrix_uint_set(mat, i, i - m - 1, DIR_NW);
       }
     } else if ((0 <= i) && (i <= m - 1)) {
-      gsl_spmatrix_uint_set(mat, i - 1, i, DIR_WEST);
-      gsl_spmatrix_uint_set(mat, i + 1, i, DIR_EAST);
-      gsl_spmatrix_uint_set(mat, i + m, i, DIR_SOUTH);
-      gsl_spmatrix_uint_set(mat, i + m - 1, i, DIR_SW);
-      gsl_spmatrix_uint_set(mat, i + m + 1, i, DIR_SE);
+      gsl_spmatrix_uint_set(mat, i, i - 1, DIR_WEST);
+      gsl_spmatrix_uint_set(mat, i, i + 1, DIR_EAST);
+      gsl_spmatrix_uint_set(mat, i, i + m, DIR_SOUTH);
+      gsl_spmatrix_uint_set(mat, i, i + m - 1, DIR_SW);
+      gsl_spmatrix_uint_set(mat, i, i + m + 1, DIR_SE);
     } else if ((width - m <= i) && (i <= width - 1)) {
-      gsl_spmatrix_uint_set(mat, i - 1, i, DIR_WEST);
-      gsl_spmatrix_uint_set(mat, i + 1, i, DIR_EAST);
-      gsl_spmatrix_uint_set(mat, i - m, i, DIR_NORTH);
-      gsl_spmatrix_uint_set(mat, i - m - 1, i, DIR_NW);
-      gsl_spmatrix_uint_set(mat, i - m + 1, i, DIR_NE);
+      gsl_spmatrix_uint_set(mat, i, i - 1, DIR_WEST);
+      gsl_spmatrix_uint_set(mat, i, i + 1, DIR_EAST);
+      gsl_spmatrix_uint_set(mat, i, i - m, DIR_NORTH);
+      gsl_spmatrix_uint_set(mat, i, i - m - 1, DIR_NW);
+      gsl_spmatrix_uint_set(mat, i, i - m + 1, DIR_NE);
     } else {
-      gsl_spmatrix_uint_set(mat, i - 1, i, DIR_WEST);
-      gsl_spmatrix_uint_set(mat, i + 1, i, DIR_EAST);
-      gsl_spmatrix_uint_set(mat, i - m, i, DIR_NORTH);
-      gsl_spmatrix_uint_set(mat, i - m - 1, i, DIR_NW);
-      gsl_spmatrix_uint_set(mat, i - m + 1, i, DIR_NE);
-      gsl_spmatrix_uint_set(mat, i + m, i, DIR_SOUTH);
-      gsl_spmatrix_uint_set(mat, i + m - 1, i, DIR_SW);
-      gsl_spmatrix_uint_set(mat, i + m + 1, i, DIR_SE);
+      gsl_spmatrix_uint_set(mat, i, i - 1, DIR_WEST);
+      gsl_spmatrix_uint_set(mat, i, i + 1, DIR_EAST);
+      gsl_spmatrix_uint_set(mat, i, i - m, DIR_NORTH);
+      gsl_spmatrix_uint_set(mat, i, i - m - 1, DIR_NW);
+      gsl_spmatrix_uint_set(mat, i, i - m + 1, DIR_NE);
+      gsl_spmatrix_uint_set(mat, i, i + m, DIR_SOUTH);
+      gsl_spmatrix_uint_set(mat, i, i + m - 1, DIR_SW);
+      gsl_spmatrix_uint_set(mat, i, i + m + 1, DIR_SE);
     }
   }
 
@@ -112,22 +112,22 @@ unsigned int** compute_queens_pos(int m, struct world_t* world, int num_queens, 
   //int test  = (m - (num_queens / 2)) / ((num_queens /2) + 1);
   
   for(int i = 0; i < num_queens / 4; i++) {
-    world->idx[2 * i + 1] = 3;
+    world->idx[2 * i + 1] = B_QUEEN;
     *queens[0] = 2 * i + 1;
-    world->idx[m - 1 - (2 * i + 1)] = 3;
+    world->idx[m - 1 - (2 * i + 1)] = B_QUEEN;
     *queens[0] = m - 1 - (2 * i + 1);
-    world->idx[(2 * i + 1) * m] = 3;
+    world->idx[(2 * i + 1) * m] = B_QUEEN;
     *queens[0] = (2 * i + 1) * m;
-    world->idx[(2 * i + 2) * m - 1] = 3;
+    world->idx[(2 * i + 2) * m - 1] = B_QUEEN;
     *queens[0] = (2 * i + 2) * m - 1;
     
-    world->idx[m * m - m + 2 * i + 1] = 2;
+    world->idx[m * m - m + 2 * i + 1] = W_QUEEN;
     *queens[1] = m * m - m + 2 * i + 1;
-    world->idx[m * m - m -  (2 * i + 1) * m] = 2;
+    world->idx[m * m - m -  (2 * i + 1) * m] = W_QUEEN;
     *queens[1] = m * m - m -  (2 * i + 1) * m;
-    world->idx[m * m - 1 -  (2 * i + 1) * m] = 2;
+    world->idx[m * m - 1 -  (2 * i + 1) * m] = W_QUEEN;
     *queens[1] = m * m - 1 -  (2 * i + 1) * m;
-    world->idx[m * m - 1 - (2 * i + 1 )] = 2;
+    world->idx[m * m - 1 - (2 * i + 1 )] = W_QUEEN;
     *queens[1] = m * m - 1 - (2 * i + 1 );
   }
 
