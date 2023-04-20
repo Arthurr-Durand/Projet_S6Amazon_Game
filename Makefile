@@ -18,7 +18,7 @@ client:
 	$(CC) $(CFLAGS) -shared -o install/client2.so src/player.c
 
 alltests:
-	$(CC) $(CFLAGS) -o  install/alltests tst/test_client1.c $(LDFLAGS) -I src/ -ldl --coverage -lgcov
+	$(CC) $(CFLAGS) -o  install/alltests tst/test_client1.c src/world.c $(LDFLAGS) -I src/ -ldl --coverage -lgcov
 
 test: alltests
 
