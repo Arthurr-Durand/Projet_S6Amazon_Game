@@ -80,7 +80,7 @@ struct move_t get_rand_move(void)
     unsigned int dir = data.graph->t[ligne][data.graph->t[ligne][0]]; //direction == premiere elements non nul de la ligne n:ligne
     int stop=1;
         while(rand()%sqrt(data.graph->num_vertices) && (stop != 0)){ //condition d'arret
-            unsigned int j = data.graph->t[ligne][0]; // on test tt les k elements de la 
+            unsigned int k = data.graph->t[ligne][0]; // on test tt les k elements de la 
             //for (unsigned int k = data.graph->p[ligne]; k < data.graph->p[ligne+1] ; k++)  
                 while ((data.graph->t[ligne][k] != dir) && (stop!=0)){
                     if(k >= (data.graph->t[ligne+1])){
