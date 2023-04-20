@@ -31,7 +31,6 @@ gsl_spmatrix_uint* squared_graph(int size)
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
             int index_i_j = i * size + j;
-            gsl_spmatrix_uint_set(mat, index_i_j, index_i_j, 0);
             if (i > 0) {
                 gsl_spmatrix_uint_set(mat, index_i_j, (i - 1) * size + j, DIR_NORTH);
                 if (j > 0)
@@ -39,6 +38,10 @@ gsl_spmatrix_uint* squared_graph(int size)
                 if (j < size - 1)
                     gsl_spmatrix_uint_set(mat, index_i_j, (i - 1) * size + j + 1, DIR_NE);
             }
+            if (j > 0)
+                gsl_spmatrix_uint_set(mat, index_i_j, i * size + j - 1, DIR_WEST);
+            if (j < size - 1)
+                gsl_spmatrix_uint_set(mat, index_i_j, i * size + j + 1, DIR_EAST);
             if (i < size - 1) {
                 gsl_spmatrix_uint_set(mat, index_i_j, (i + 1) * size + j, DIR_SOUTH);
                 if (j > 0)
@@ -46,10 +49,6 @@ gsl_spmatrix_uint* squared_graph(int size)
                 if (j < size - 1)
                     gsl_spmatrix_uint_set(mat, index_i_j, (i + 1) * size + j + 1, DIR_SE);
             }
-            if (j > 0)
-                gsl_spmatrix_uint_set(mat, index_i_j, i * size + j - 1, DIR_WEST);
-            if (j < size - 1)
-                gsl_spmatrix_uint_set(mat, index_i_j, i * size + j + 1, DIR_EAST);
         }
     }
 
