@@ -6,6 +6,7 @@
 #include <time.h>
 
 #include "world.h"
+#include "move_server.h"
 #include "tools.h"
 
 enum player_color {
@@ -22,13 +23,15 @@ struct player {
   enum player_color color;
 };
 
-char const* start_player(char const* player_1, char const* player_2) {
+char const* start_player(char const* player_1, char const* player_2)
+{
   if (rand() % 2 == 0)
     return player_1;
   return player_2;
 }
 
-struct player* compute_next_player(struct moves_t* moves, struct player* player_1, struct player* player_2) {
+struct player* compute_next_player(struct moves_t* moves, struct player* player_1, struct player* player_2)
+{
   if (player_1->color == moves->current)
     return player_1;
   return player_2;
@@ -140,7 +143,7 @@ int main(int argc, char* argv[])
 
     struct graph_t graph = { width * width, graph_init(width, w_type) };
     struct world_t * world = world_init(width);
-
+        
     int num_queens = 4*(width/10 + 1);
     unsigned int* queens[NUM_PLAYERS];
     queens[0] = malloc(sizeof(unsigned int) * num_queens);
@@ -149,23 +152,30 @@ int main(int argc, char* argv[])
     
     iencly.initialize(iencly.color, &graph, num_queens, queens);
     internet.initialize(iencly.color, &graph, num_queens, queens);
-
+    
     struct move_t move = {-1, -1, -1};
-    struct moves_t moves = {&move, BLACK};
-
+    struct moves_t* moves = malloc(sizeof(struct moves_t));
+    moves->t = malloc(sizeof(struct move_t));
+    moves->t[0] = move;
+    moves->current = 0;
+    
     struct player* current_player;
     // while (???)
-    current_player = compute_next_player(&moves, &iencly, &internet);
-    //move = current_player->play(move);
-    moves.current = (moves.current + 1) % NUM_PLAYERS;
+    current_player = compute_next_player(moves, &iencly, &internet);
+    //move = current_player.play(move);
+    
+    if (!is_move_valid(&graph, world, moves, move)) {
+	// do something when move invalid
+    }
     
     free_world(world);
     free_queens(queens);
+    free_moves(moves);
     gsl_spmatrix_uint_free(graph.t);
     iencly.finalize();
     internet.finalize();
     dlclose(player_1);
     dlclose(player_2);
-
+    
     return EXIT_SUCCESS;
 }

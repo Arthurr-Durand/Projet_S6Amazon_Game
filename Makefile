@@ -10,7 +10,7 @@ all: build
 build: client server
 
 server:
-	$(CC) $(CFLAGS) -o install/server src/server.c src/world.c src/tools.c $(LDFLAGS)
+	$(CC) $(CFLAGS) -o install/server src/server.c src/world.c src/tools.c src/move_server.c $(LDFLAGS)
 
 client:
 	mkdir -p install
