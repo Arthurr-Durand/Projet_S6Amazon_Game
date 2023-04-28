@@ -44,7 +44,7 @@ int is_move_valid(struct graph_t* graph, struct world_t* world,
   }
 }
 
-void dirs_possible(unsigned int* dirs, unsigned int src, unsigned int dst) {
+void dirs_possible(enum dir_t* dirs, unsigned int src, unsigned int dst) {
     if (src > dst) {
 	for (int i = 0; i < 2; i++) {
 	    dirs[i] = i + 1;
@@ -56,6 +56,19 @@ void dirs_possible(unsigned int* dirs, unsigned int src, unsigned int dst) {
 	    dirs[i] = i + 3;
 	}
     }
+}
+
+int exists_neighbor(struct graph_t* graph, enum dir_t dir, unsigned int current) {
+    enum dir_t new_dir;
+    unsigned int idx;
+    for (int k = graph->t->p[current]; k < graph->t->p[current+1]; k++) {
+	idx = graph->t->i[k];
+	new_dir = gsl_spmatrix_uint_get(graph->t, current, idx);
+	if (new_dir == dir) {
+	    return idx;
+	}
+    }
+    return -1;
 }
 
 void print_moves(struct moves_t* moves)
