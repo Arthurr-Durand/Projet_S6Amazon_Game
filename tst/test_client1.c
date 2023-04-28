@@ -10,6 +10,41 @@
 
 #define NUM_PLAYERS 2
 
+int is_queen(unsigned int* queens[], unsigned int num_queens, unsigned int pos) {
+    for (unsigned int i = 0; i < NUM_PLAYERS; i++) {
+        for (unsigned int y = 0; y < num_queens; y++) {
+            if (queens[i][y] == pos)
+                return 1;
+        }
+    }
+    return 0;
+}
+
+int is_arrow(unsigned int arrows[], unsigned int arrows_number, unsigned int pos)
+{
+    for (unsigned int i = 0; i < arrows_number; i++) {
+        if (arrows[i] == pos)
+            return 1;
+    }
+    return 0;
+}
+
+void print_game(int width, unsigned int* queens[], unsigned int num_queens, unsigned int arrows[], unsigned int arrows_number)
+{
+    for (int i = 0; i < width; i++) {
+        for (int j = 0; j < width; j++) {
+            if (is_queen(queens, num_queens, (j+width*i)))
+                printf("| ");
+            else if (is_arrow(arrows, arrows_number, (j+width*i)))
+                printf("X ");
+            else
+                printf("- ");
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
 void test_get_player_name(char const* (*get_player_name)())
 {
     printf("\t%s", __func__);
@@ -46,26 +81,83 @@ void test_initialize(void (*initialize)())
     printf("\t\tOK\n");
 }
 
-void test_play(struct move_t (*play)())
-{
-    printf("\t%s", __func__);
-
-    struct move_t previous_move = { 0, 1, 2 };
-
-    struct move_t new_move1 = (*play)(previous_move);
-    printf("\nLOG : move from %d to %d.\n", new_move1.queen_src, new_move1.queen_dst);
-
-    struct move_t new_move2 = (*play)(previous_move);
-    printf("LOG : move from %d to %d.\n", new_move2.queen_src, new_move2.queen_dst);
-
-    printf("\t\tOK\n");
-}
-
 void test_finalize(void (*finalize)())
 {
     printf("\t%s", __func__);
 
     (*finalize)();
+
+    printf("\t\tOK\n");
+}
+
+void test_play(void (*initialize)(), struct move_t (*play)(), void (*finalize)(), void (*initialize2)(), struct move_t (*play2)(), void (*finalize2)())
+{
+    printf("\t%s", __func__);
+
+    int width = 5;
+    struct graph_t graph = { width * width, graph_init(width, SQUARED) };
+
+    unsigned int num_queens = 2;
+
+    unsigned int* queens[NUM_PLAYERS];
+    for (unsigned int i = 0; i < NUM_PLAYERS; i++)
+        queens[i] = (unsigned int*)malloc(sizeof(unsigned int) * num_queens);
+
+    queens[0][0] = 0;
+    queens[0][1] = 4;
+    queens[1][0] = 20;
+    queens[1][1] = 24;
+
+    (*initialize)(0, &graph, num_queens, queens);
+    (*initialize2)(1, &graph, num_queens, queens);
+
+    unsigned int arrows_number = 0;
+    unsigned int* arrows = malloc(0);
+
+    struct move_t initial_move = {-1, -1, -1};
+    struct move_t previous_move;
+    int max_turn = 5;
+
+    while (max_turn) {
+        previous_move = (*play)(initial_move);
+        arrows_number++;
+        arrows = realloc(arrows, sizeof(unsigned int)*arrows_number);
+        arrows[arrows_number-1] = previous_move.arrow_dst;
+        for (unsigned int i = 0; i < NUM_PLAYERS; i++) {
+            for (unsigned int y = 0; y < num_queens; y++) {
+                if (queens[i][y] == previous_move.queen_src)
+                    queens[i][y] = previous_move.queen_dst;
+            }
+        }
+
+        printf("\nPlayer 0 move queen from (%d) to (%d) and shoot to (%d).\n", previous_move.queen_src, previous_move.queen_dst, previous_move.arrow_dst);
+        print_game(width, queens, num_queens, arrows, arrows_number);
+        
+        previous_move = (*play2)(initial_move);
+        arrows_number++;
+        arrows = realloc(arrows, sizeof(unsigned int)*arrows_number);
+        arrows[arrows_number-1] = previous_move.arrow_dst;
+        for (unsigned int i = 0; i < NUM_PLAYERS; i++) {
+            for (unsigned int y = 0; y < num_queens; y++) {
+                if (queens[i][y] == previous_move.queen_src)
+                    queens[i][y] = previous_move.queen_dst;
+            }
+        }
+
+        printf("\nPlayer 1 move queen from (%d) to (%d) and shoot to (%d).\n", previous_move.queen_src, previous_move.queen_dst, previous_move.arrow_dst);
+        print_game(width, queens, num_queens, arrows, arrows_number);
+
+        max_turn--;
+    }
+
+    free(arrows);
+
+    for (unsigned int i = 0; i < NUM_PLAYERS; i++)
+        free(queens[i]);
+    gsl_spmatrix_uint_free(graph.t);
+
+    (*finalize)();
+    (*finalize2)();
 
     printf("\t\tOK\n");
 }
@@ -79,44 +171,31 @@ int main()
     void (*initialize)();
     struct move_t (*play)();
     void (*finalize)();
-    char* error;
 
     client = dlopen("./install/client1.so", RTLD_LAZY);
-    if (!client) {
-        fputs(dlerror(), stderr);
-        exit(1);
-    }
-
     get_player_name = dlsym(client, "get_player_name");
-    if ((error = dlerror()) != NULL) {
-        fputs(error, stderr);
-        exit(1);
-    }
-
     initialize = dlsym(client, "initialize");
-    if ((error = dlerror()) != NULL) {
-        fputs(error, stderr);
-        exit(1);
-    }
-
     play = dlsym(client, "play");
-    if ((error = dlerror()) != NULL) {
-        fputs(error, stderr);
-        exit(1);
-    }
-
     finalize = dlsym(client, "finalize");
-    if ((error = dlerror()) != NULL) {
-        fputs(error, stderr);
-        exit(1);
-    }
+
+    void* client2;
+    void (*initialize2)();
+    struct move_t (*play2)();
+    void (*finalize2)();
+
+    client2 = dlopen("./install/client2.so", RTLD_LAZY);
+    initialize2 = dlsym(client2, "initialize");
+    play2 = dlsym(client2, "play");
+    finalize2 = dlsym(client2, "finalize");
 
     test_get_player_name(get_player_name);
     test_initialize(initialize);
-    test_play(play);
     test_finalize(finalize);
+    test_play(initialize, play, finalize, initialize2, play2, finalize2);
 
     dlclose(client);
+
+    dlclose(client2);
 
     return EXIT_SUCCESS;
 }
