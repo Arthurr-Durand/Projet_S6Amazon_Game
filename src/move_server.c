@@ -17,28 +17,31 @@ int not_in_world(unsigned int size, struct move_t new_move) {
     new_move.arrow_dst > size);
 }
 
-int obstacle(struct graph_t* graph, struct world_t* world, struct move_t new_move) { 
+/*
+int obstacle(struct graph_t* graph, struct world_t* world, unsigned int src, unsigned int dst) { 
   unsigned int *dirs = malloc(4 * sizeof(unsigned int));
-  dirs_possible(dirs, new_move.queen_src, new_move.queen_dst);
+  dirs_possible(dirs, src, dst);
   for(unsigned int i=0; i < 4; i++) {
-    
+    unsigned int current = src;
+    while ( 
   }
 }
-
+*/
 
 int is_move_valid(struct graph_t* graph, struct world_t* world,
 	       struct moves_t* moves, struct move_t new_move)
 {
   unsigned int size = world->width * world->width;
-  if ( not_in_world(size, new_move) || obstacle(graph, world, new_move) )
-	//  TO DO || dst are not reachable (not straight line or something between)
+  if ( not_in_world(size, new_move) || obstacle(graph, world, new_move) ) {
 	return 0;
-    
+  }
+  else { 
     moves = moves_add(moves, new_move);
     world->idx[new_move.queen_dst] = world->idx[new_move.queen_src];
     world->idx[new_move.queen_src] = NO_SORT;
     world->idx[new_move.arrow_dst] = BLOCK;
     return 1;
+  }
 }
 
 void dirs_possible(unsigned int* dirs, unsigned int src, unsigned int dst) {
@@ -47,7 +50,6 @@ void dirs_possible(unsigned int* dirs, unsigned int src, unsigned int dst) {
 	    dirs[i] = i + 1;
 	    dirs[i + 2] = i + 7;
 	}
-	return dirs;
     }
     else {
 	for (int i = 0; i < 4; i++) {
