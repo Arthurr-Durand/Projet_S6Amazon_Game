@@ -37,6 +37,10 @@ struct player* compute_next_player(struct moves_t* moves, struct player* player_
   return player_2;
 }
 
+enum player_color sort_to_player_color(enum sort sort) {
+  return ( sort == B_QUEEN )? BLACK : WHITE; 
+}
+
 int main(int argc, char* argv[])
 {
     printf("[-] Server running\n\n");
@@ -151,7 +155,7 @@ int main(int argc, char* argv[])
     compute_queens_pos(width, world, num_queens, queens);
     
     iencly.initialize(iencly.color, &graph, num_queens, queens);
-    internet.initialize(iencly.color, &graph, num_queens, queens);
+    internet.initialize(internet.color, &graph, num_queens, queens);
     
     struct move_t move = {-1, -1, -1};
     struct moves_t* moves = malloc(sizeof(struct moves_t));
@@ -160,12 +164,24 @@ int main(int argc, char* argv[])
     moves->current = 0;
     
     struct player* current_player;
+    int game_time = 15;
+    int turn = 0;
+    int tries[2] = {};
+    int max_try = 5;
     // while (???)
-    current_player = compute_next_player(moves, &iencly, &internet);
-    //move = current_player.play(move);
-    
-    if (!is_move_valid(&graph, world, moves, move)) {
-	// do something when move invalid
+    //on fait un compte de tentative par tour, et on fait un compte de tentative
+    while ( (turn < game_time) && (tries[0] < max_try ) && ( tries[1] < max_try ) ){
+      current_player = compute_next_player(moves, &iencly, &internet);
+      move = current_player->play(move);    
+      if (!is_move_valid(&graph, world, moves, move) && (current_player->color != sort_to_player_color(world->idx[move.queen_src])) ){
+	tries[current_player->color]++;
+	}
+      else {
+	world->idx[move.queen_src] = NO_SORT;
+	world->idx[move.queen_dst] = current_player->color;
+	world->idx[move.arrow_dst] = BLOCK;
+      }
+      turn = turn + 1;
     }
     
     free_world(world);

@@ -39,6 +39,16 @@ void initialize(unsigned int player_id, struct graph_t* graph, unsigned int num_
     gsl_spmatrix_uint_memcpy(data.graph->t, graph->t);
     gsl_spmatrix_uint_free(tmp);
 }
+struct move_t play(struct move_t previous_move) {
+  struct move_t new_move;
+  new_move.queen_src = previous_move.queen_dst;
+  unsigned int rd1 = rand() % 25;
+  unsigned int rd2 = rand() % 25;
+  new_move.queen_dst = rd1;
+  new_move.arrow_dst = rd2;  
+  return new_move;
+}
+
 
 void finalize()
 {
@@ -48,3 +58,4 @@ void finalize()
     gsl_spmatrix_uint_free(data.graph->t);
     free(data.graph);
 }
+

@@ -17,22 +17,33 @@ int not_in_world(unsigned int size, struct move_t new_move) {
     new_move.arrow_dst > size);
 }
 
-/*
+
 int obstacle(struct graph_t* graph, struct world_t* world, unsigned int src, unsigned int dst) { 
+  unsigned int size = graph->num_vertices;
   unsigned int *dirs = malloc(4 * sizeof(unsigned int));
   dirs_possible(dirs, src, dst);
   for(unsigned int i=0; i < 4; i++) {
-    unsigned int current = src;
-    while ( 
+    unsigned int current = exists_neighbor(graph, dirs[i], src);
+    while ( (current < size ) && ( world->idx[current] == NO_SORT ) ) {
+      if ( current == dst ) {
+	return 0;
+      }
+      current = exists_neighbor(graph, dirs[i], current);
+    }
   }
+  return 1;
 }
-*/
+
 
 int is_move_valid(struct graph_t* graph, struct world_t* world,
-	       struct moves_t* moves, struct move_t new_move)
-{
+		  struct moves_t* moves, struct move_t new_move) {
+  
   unsigned int size = world->width * world->width;
-  if ( not_in_world(size, new_move) || obstacle(graph, world, new_move) ) {
+  
+  if ( not_in_world(size, new_move) || 
+       obstacle(graph, world, new_move.queen_src, new_move.queen_dst) ||
+       obstacle(graph, world, new_move.queen_src, new_move.queen_dst)  
+       ) {
 	return 0;
   }
   else { 
@@ -58,7 +69,7 @@ void dirs_possible(enum dir_t* dirs, unsigned int src, unsigned int dst) {
     }
 }
 
-int exists_neighbor(struct graph_t* graph, enum dir_t dir, unsigned int current) {
+unsigned int exists_neighbor(struct graph_t* graph, enum dir_t dir, unsigned int current) {
     enum dir_t new_dir;
     unsigned int idx;
     for (int k = graph->t->p[current]; k < graph->t->p[current+1]; k++) {
@@ -68,7 +79,7 @@ int exists_neighbor(struct graph_t* graph, enum dir_t dir, unsigned int current)
 	    return idx;
 	}
     }
-    return -1;
+    return graph->num_vertices;
 }
 
 void print_moves(struct moves_t* moves)
