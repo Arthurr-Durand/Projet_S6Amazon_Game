@@ -10,7 +10,8 @@
 
 #define NUM_PLAYERS 2
 
-int is_queen(unsigned int* queens[], unsigned int num_queens, unsigned int pos) {
+int is_queen(unsigned int* queens[], unsigned int num_queens, unsigned int pos)
+{
     for (unsigned int i = 0; i < NUM_PLAYERS; i++) {
         for (unsigned int y = 0; y < num_queens; y++) {
             if (queens[i][y] == pos)
@@ -31,11 +32,11 @@ int is_arrow(unsigned int arrows[], unsigned int arrows_number, unsigned int pos
 
 void print_game(int width, unsigned int* queens[], unsigned int num_queens, unsigned int arrows[], unsigned int arrows_number)
 {
-    for (int i = 0; i < width; i++) {
-        for (int j = 0; j < width; j++) {
-            if (is_queen(queens, num_queens, (j+width*i)))
+    for (int j = 0; j < width; j++) {
+        for (int i = 0; i < width; i++) {
+            if (is_queen(queens, num_queens, (i + width * j)))
                 printf("| ");
-            else if (is_arrow(arrows, arrows_number, (j+width*i)))
+            else if (is_arrow(arrows, arrows_number, (i + width * j)))
                 printf("X ");
             else
                 printf("- ");
@@ -48,7 +49,9 @@ void print_game(int width, unsigned int* queens[], unsigned int num_queens, unsi
 void test_get_player_name(char const* (*get_player_name)())
 {
     printf("\t%s", __func__);
+
     assert(!strcmp((*get_player_name)(), "BOTTES de Anton"));
+    
     printf("\tOK\n");
 }
 
@@ -114,15 +117,16 @@ void test_play(void (*initialize)(), struct move_t (*play)(), void (*finalize)()
     unsigned int arrows_number = 0;
     unsigned int* arrows = malloc(0);
 
-    struct move_t initial_move = {-1, -1, -1};
-    struct move_t previous_move;
+    struct move_t previous_move = { -1, -1, -1 };
     int max_turn = 5;
 
+    printf("\n");
+
     while (max_turn) {
-        previous_move = (*play)(initial_move);
+        previous_move = (*play)(previous_move);
         arrows_number++;
-        arrows = realloc(arrows, sizeof(unsigned int)*arrows_number);
-        arrows[arrows_number-1] = previous_move.arrow_dst;
+        arrows = realloc(arrows, sizeof(unsigned int) * arrows_number);
+        arrows[arrows_number - 1] = previous_move.arrow_dst;
         for (unsigned int i = 0; i < NUM_PLAYERS; i++) {
             for (unsigned int y = 0; y < num_queens; y++) {
                 if (queens[i][y] == previous_move.queen_src)
@@ -130,13 +134,13 @@ void test_play(void (*initialize)(), struct move_t (*play)(), void (*finalize)()
             }
         }
 
-        printf("\nPlayer 0 move queen from (%d) to (%d) and shoot to (%d).\n", previous_move.queen_src, previous_move.queen_dst, previous_move.arrow_dst);
+        printf("Player 0 move queen from (%d) to (%d) and shoot to (%d).\n", previous_move.queen_src, previous_move.queen_dst, previous_move.arrow_dst);
         print_game(width, queens, num_queens, arrows, arrows_number);
-        
-        previous_move = (*play2)(initial_move);
+
+        previous_move = (*play2)(previous_move);
         arrows_number++;
-        arrows = realloc(arrows, sizeof(unsigned int)*arrows_number);
-        arrows[arrows_number-1] = previous_move.arrow_dst;
+        arrows = realloc(arrows, sizeof(unsigned int) * arrows_number);
+        arrows[arrows_number - 1] = previous_move.arrow_dst;
         for (unsigned int i = 0; i < NUM_PLAYERS; i++) {
             for (unsigned int y = 0; y < num_queens; y++) {
                 if (queens[i][y] == previous_move.queen_src)
@@ -144,7 +148,7 @@ void test_play(void (*initialize)(), struct move_t (*play)(), void (*finalize)()
             }
         }
 
-        printf("\nPlayer 1 move queen from (%d) to (%d) and shoot to (%d).\n", previous_move.queen_src, previous_move.queen_dst, previous_move.arrow_dst);
+        printf("Player 1 move queen from (%d) to (%d) and shoot to (%d).\n", previous_move.queen_src, previous_move.queen_dst, previous_move.arrow_dst);
         print_game(width, queens, num_queens, arrows, arrows_number);
 
         max_turn--;
