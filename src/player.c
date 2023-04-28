@@ -124,6 +124,7 @@ void shift_a_droite(int p,unsigned int* tablo, unsigned int arrow_p)
         tablo[i + 1] = tablo[i];
         k = tmp;
     }
+    tablo[p]=arrow_p;
 }
 
 void tablo_de_fleches(unsigned int* toblo,unsigned int pos)
