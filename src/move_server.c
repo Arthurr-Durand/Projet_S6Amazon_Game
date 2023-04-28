@@ -9,13 +9,28 @@ struct moves_t* moves_add(struct moves_t* moves, struct move_t move)
     return moves;
 }
 
+//return if the destination of the arrow or the queuen are out of the world
+int not_in_world(unsigned int size, struct move_t new_move) {
+  return (new_move.queen_src == new_move.queen_dst || new_move.arrow_dst == new_move.queen_dst ||
+	new_move.queen_src > size ||
+	new_move.queen_dst > size ||
+    new_move.arrow_dst > size);
+}
+
+int obstacle(struct graph_t* graph, struct world_t* world, struct move_t new_move) { 
+  unsigned int *dirs = malloc(4 * sizeof(unsigned int));
+  dirs_possible(dirs, new_move.queen_src, new_move.queen_dst);
+  for(unsigned int i=0; i < 4; i++) {
+    
+  }
+}
+
+
 int is_move_valid(struct graph_t* graph, struct world_t* world,
 	       struct moves_t* moves, struct move_t new_move)
 {
-    if (new_move.queen_src == new_move.queen_dst || new_move.arrow_dst == new_move.queen_dst ||
-	new_move.queen_src > world->width * world->width ||
-	new_move.queen_dst > world->width * world->width ||
-	new_move.arrow_dst > world->width * world->width)
+  unsigned int size = world->width * world->width;
+  if ( not_in_world(size, new_move) || obstacle(graph, world, new_move) )
 	//  TO DO || dst are not reachable (not straight line or something between)
 	return 0;
     
