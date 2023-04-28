@@ -41,6 +41,21 @@ int is_move_valid(struct graph_t* graph, struct world_t* world,
     return 1;
 }
 
+void dirs_possible(unsigned int* dirs, unsigned int src, unsigned int dst) {
+    if (src > dst) {
+	for (int i = 0; i < 2; i++) {
+	    dirs[i] = i + 1;
+	    dirs[i + 2] = i + 7;
+	}
+	return dirs;
+    }
+    else {
+	for (int i = 0; i < 4; i++) {
+	    dirs[i] = i + 3;
+	}
+    }
+}
+
 void print_moves(struct moves_t* moves)
 {
     printf("[ ");
