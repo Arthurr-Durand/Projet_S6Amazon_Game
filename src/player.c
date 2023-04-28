@@ -11,8 +11,8 @@ struct player_data {
     struct graph_t* graph;
     unsigned int num_queens;
     unsigned int** queens;
-    // unsigned int size;
-    // unsigned int* world;
+    unsigned int size;
+    unsigned int* world;
 };
 
 static struct player_data data;
@@ -20,32 +20,38 @@ static struct player_data data;
 char const* get_player_name()
 {
     const char* bot = "BOTTES de Anton";
-    printf("c la\n");
+    // printf("c la\n");
     return bot;
 }
 
 void initialize(unsigned int player_id, struct graph_t* graph, unsigned int num_queens, unsigned int* queens[NUM_PLAYERS])
 {
     data.id = player_id;
-    // data.size =graph->t->size1*graph->t->size2;
+    data.size =graph->t->size1*graph->t->size2;
     data.num_queens = num_queens;
-    printf("coucou\n");
+    // printf("coucou\n");
     data.queens = malloc(sizeof(unsigned int*) * NUM_PLAYERS);
     for (unsigned int p = 0; p < NUM_PLAYERS; p++) {
         data.queens[p] = (unsigned int*)malloc(sizeof(unsigned int) * data.num_queens);
-        for (unsigned int q = 0; q < data.num_queens; q++)
+        for (unsigned int q = 0; q < data.num_queens; q++){
             data.queens[p][q] = queens[p][q];
+        }
+    }
+    // printf("coucou2\n");
+    data.world = malloc(sizeof(unsigned int)*data.size);
+    // printf("%d\n",data.num_queens);
+    for(unsigned int i=0;i<data.size ;i++){
+        // printf("%d\n",i);
+        data.world[i]=0;
     }
 
-    // data.world = malloc(sizeof(unsigned int)*data.size);
-    // for(unsigned int i=0;i<data.size;i++)
-    //     data.world[i]=0;
-    // printf("coucou2");
-    // for (unsigned int i = 0; i < NUM_PLAYERS; i++) {
-    //     for (unsigned int j = 0; i < data.num_queens; i++) {
-    //         data.world[data.queens[i][j]]=1;
-    //     }
-    // }
+    for(unsigned int i=0;i<NUM_PLAYERS;i++){
+        for (unsigned int j = 0; j < num_queens; j++)
+        {
+            data.world[data.queens[i][j]]=1;
+        }
+        
+    }
 
     data.graph = malloc(sizeof(struct graph_t));
     data.graph->num_vertices = graph->num_vertices;
@@ -94,7 +100,7 @@ unsigned int get_next_postion(unsigned int position, unsigned int dir)
     default:
         break;
     }
-    return new_position;
+    return (data.world[new_position])? position : new_position;
 }
 
 // void shift_a_droite(int p,unsigned int* tablo, unsigned int arrow_p)
@@ -128,7 +134,7 @@ int tiiir(int queen_pos)
         dir = gsl_spmatrix_uint_get(data.graph->t, queen_pos, data.graph->t->i[k]);
         arrow_pos = get_next_postion(queen_pos, dir);
     }
-    // data.world[arrow_pos]=1;
+    data.world[arrow_pos]=1;
     return arrow_pos;
 }
 
@@ -144,11 +150,7 @@ struct move_t play(struct move_t previous_move)
         if (queen == previous_move.queen_src)
             queen = previous_move.queen_dst;
     }
-    printf("ici \n");
-    // if ((previous_move.queen_src != -1) || (previous_move.arrow_dst !=-1)){
-    // data.world[previous_move.queen_src]=0;
-    // data.world[previous_move.arrow_dst]=1;
-    // }
+
     unsigned int find = 0;
     for (unsigned int queen_nb = 0; (queen_nb < data.num_queens && !find); queen_nb++) { // For each queen
         queen_position = data.queens[data.id][queen_nb];
@@ -164,8 +166,8 @@ struct move_t play(struct move_t previous_move)
         }
     }
     printf("ici");
-    // data.world[queen_position]=0;
-    // data.world[new_queen_position]=1;
+    data.world[queen_position]=0;
+    data.world[new_queen_position]=1;
     next_move.arrow_dst = tiiir(new_queen_position); 
 
     return next_move;
@@ -182,5 +184,5 @@ void finalize()
     free(data.queens);
     gsl_spmatrix_uint_free(data.graph->t);
     free(data.graph);
-    // free(data.world);
+    free(data.world);
 }
