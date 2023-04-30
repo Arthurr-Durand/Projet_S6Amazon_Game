@@ -14,8 +14,9 @@ server:
 
 client:
 	mkdir -p install
-	$(CC) $(CFLAGS) -shared -o install/client1.so src/player_1.c
-	$(CC) $(CFLAGS) -shared -o install/client2.so src/player_2.c
+	$(CC) $(CFLAGS) -shared -o install/client1.so src/player_1.c src/move_server.c
+	$(CC) $(CFLAGS) -shared -o install/client2.so src/player_2.c src/move_server.c
+# move_server là pour afficher pdt le begug, à enlever après
 
 alltests:
 	$(CC) $(CFLAGS) -o  install/alltests tst/test_client1.c src/world.c $(LDFLAGS) -I src/ -ldl --coverage -lgcov
