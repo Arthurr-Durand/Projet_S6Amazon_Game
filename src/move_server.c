@@ -11,48 +11,41 @@ struct moves_t* moves_add(struct moves_t* moves, struct move_t move)
 
 //return if the destination of the arrow or the queuen are out of the world
 int not_in_world(unsigned int size, struct move_t new_move) {
-  return (new_move.queen_src == new_move.queen_dst || new_move.arrow_dst == new_move.queen_dst ||
-	new_move.queen_src > size ||
-	new_move.queen_dst > size ||
-    new_move.arrow_dst > size);
+    return (new_move.queen_src == new_move.queen_dst || new_move.arrow_dst == new_move.queen_dst ||
+	    new_move.queen_src > size ||
+	    new_move.queen_dst > size ||
+        new_move.arrow_dst > size);
 }
 
 
 int obstacle(struct graph_t* graph, struct world_t* world, unsigned int src, unsigned int dst) { 
-  unsigned int size = graph->num_vertices;
-  unsigned int *dirs = malloc(4 * sizeof(unsigned int));
-  dirs_possible(dirs, src, dst);
-  for(unsigned int i=0; i < 4; i++) {
-    unsigned int current = exists_neighbor(graph, dirs[i], src);
-    while ( (current < size ) && ( world->idx[current] == NO_SORT ) ) {
-      if ( current == dst ) {
-	return 0;
-      }
-      current = exists_neighbor(graph, dirs[i], current);
+    unsigned int size = graph->num_vertices;
+    unsigned int *dirs = malloc(4 * sizeof(unsigned int));
+    dirs_possible(dirs, src, dst);
+    for(unsigned int i=0; i < 4; i++) {
+        unsigned int current = exists_neighbor(graph, dirs[i], src);
+        while ( (current < size ) && ( world->idx[current] == NO_SORT ) ) {
+            if ( current == dst ) {
+	            return 0;
+            }
+            current = exists_neighbor(graph, dirs[i], current);
+        }
     }
-  }
-  return 1;
+    return 1;
 }
 
 
-int is_move_valid(struct graph_t* graph, struct world_t* world,
-		  struct moves_t* moves, struct move_t new_move) {
+int is_move_valid(struct graph_t* graph, struct world_t* world, struct move_t new_move)
+{
+    unsigned int size = world->width * world->width;
   
-  unsigned int size = world->width * world->width;
-  
-  if ( not_in_world(size, new_move) || 
-       obstacle(graph, world, new_move.queen_src, new_move.queen_dst) ||
-       obstacle(graph, world, new_move.queen_src, new_move.queen_dst)  
-       ) {
-	return 0;
-  }
-  else { 
-    moves = moves_add(moves, new_move);
-    world->idx[new_move.queen_dst] = world->idx[new_move.queen_src];
-    world->idx[new_move.queen_src] = NO_SORT;
-    world->idx[new_move.arrow_dst] = BLOCK;
+    if (not_in_world(size, new_move) || 
+        obstacle(graph, world, new_move.queen_src, new_move.queen_dst) ||
+        obstacle(graph, world, new_move.queen_dst, new_move.arrow_dst)  
+        ) {
+	    return 0;
+    }
     return 1;
-  }
 }
 
 void dirs_possible(enum dir_t* dirs, unsigned int src, unsigned int dst) {
@@ -82,11 +75,16 @@ unsigned int exists_neighbor(struct graph_t* graph, enum dir_t dir, unsigned int
     return graph->num_vertices;
 }
 
+void print_move(struct move_t move)
+{
+	printf("{ %d %d %d }  ", move.queen_src, move.queen_dst, move.arrow_dst);  
+}
+
 void print_moves(struct moves_t* moves)
 {
     printf("[ ");
     for (unsigned int i = 0; i <= moves->current; i++) {
-	printf("{ %d %d %d }  ", moves->t[i].queen_src, moves->t[i].queen_dst, moves->t[i].arrow_dst);
+        print_move(moves->t[i]);
     }
     printf("]\n");
 }
