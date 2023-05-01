@@ -112,7 +112,7 @@ unsigned int tiiir(unsigned int queen_pos)
     for (int k = data.graph->t->p[queen_pos]; k < data.graph->t->p[queen_pos + 1] && !find; k++) { // For each accessible directions
         unsigned int dir = gsl_spmatrix_uint_get(data.graph->t, queen_pos, data.graph->t->i[k]);
         arrow_pos = get_next_postion(queen_pos, dir);
-        if (data.world[arrow_pos] != 0 && arrow_pos != queen_pos)
+        if (arrow_pos != queen_pos)
             find = 1;
     }
 
