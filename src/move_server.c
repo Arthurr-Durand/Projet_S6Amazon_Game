@@ -17,37 +17,38 @@ int not_in_world(unsigned int size, struct move_t new_move) {
         new_move.arrow_dst > size);
 }
 
-void dirs_possible(enum dir_t* dirs, unsigned int src, unsigned int dst)
+/*
+ * Simple and easy to read function which returns the direction to go from the src index to the dst index. Returns NO_DIR if it's not possible.
+ */
+enum dir_t get_direction(int size, int src, int dst)
 {
-    if (src > dst) {
-        for (int i = 0; i < 2; i++) {
-            dirs[i] = i + 1;
-            dirs[i + 2] = i + 7;
-        }
-    } else {
-        for (int i = 0; i < 4; i++)
-            dirs[i] = i + 3;
-    }
+    int dx = dst % size - src % size;
+    int dy = dst / size - src / size;
+    return (dx == 0 && dy == 0) ? NO_DIR
+        : (dx == 0)             ? ((dy > 0) ? DIR_SOUTH : DIR_NORTH)
+        : (dy == 0)             ? ((dx > 0) ? DIR_EAST : DIR_WEST)
+        : (dx == dy)            ? ((dx > 0) ? DIR_SE : DIR_NW)
+        : (dx == -dy)           ? ((dx > 0) ? DIR_NE : DIR_SW)
+                                : NO_DIR;
 }
 
 int obstacle(struct graph_t* graph, struct world_t* world, unsigned int src, unsigned int dst)
 {
-    enum dir_t dirs[4];
-    dirs_possible(dirs, src, dst);
-    for (unsigned int i = 0; i < 4; i++) {
-        unsigned int current = exists_neighbor(graph, dirs[i], src);
-        while ((current < graph->num_vertices) && (world->idx[current] == NO_SORT)) {
-            if (current == dst)
-	            return 0;
-            current = exists_neighbor(graph, dirs[i], current);
-        }
+    enum dir_t dir = get_direction(sqrt(graph->t->size1), src, dst);
+    if (dir == NO_DIR)
+        return 1;
+    unsigned int current = exists_neighbor(graph, dir, src);
+    while ((current < graph->num_vertices) && (world->idx[current] == NO_SORT)) {
+        if (current == dst)
+	        return 0;
+        current = exists_neighbor(graph, dir, current);
     }
     return 1;
 }
 
 int is_move_valid(struct graph_t* graph, struct world_t* world, struct move_t new_move)
-{ 
-    return (not_in_world(world->width * world->width, new_move) || obstacle(graph, world, new_move.queen_src, new_move.queen_dst) || ((new_move.queen_src == new_move.arrow_dst) || obstacle(graph, world, new_move.queen_dst, new_move.arrow_dst)));
+{
+    return !(not_in_world(world->width * world->width, new_move) || obstacle(graph, world, new_move.queen_src, new_move.queen_dst) || (!(new_move.queen_src == new_move.arrow_dst) && obstacle(graph, world, new_move.queen_dst, new_move.arrow_dst)));
 }
 
 unsigned int exists_neighbor(struct graph_t* graph, enum dir_t dir, unsigned int current) {
