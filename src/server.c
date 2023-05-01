@@ -46,6 +46,58 @@ enum sort player_color_to_sort(enum player_color color)
     return (color == BLACK ) ? B_QUEEN : W_QUEEN;
 }
 
+unsigned int get_next_postion(unsigned int position, unsigned int dir,int size)
+{
+    unsigned int new_position = position;
+
+    switch (dir) {
+    case DIR_NORTH:
+        new_position = new_position - size;
+        break;
+    case DIR_NE:
+        new_position = new_position - size + 1;
+        break;
+    case DIR_EAST:
+        new_position = new_position + 1;
+        break;
+    case DIR_SE:
+        new_position = new_position + size + 1;
+        break;
+    case DIR_SOUTH:
+        new_position = new_position + size;
+        break;
+    case DIR_SW:
+        new_position = new_position + size - 1;
+        break;
+    case DIR_WEST:
+        new_position = new_position - 1;
+        break;
+    case DIR_NW:
+        new_position = new_position - size - 1;
+        break;
+    default:
+        break;
+    }
+
+    return new_position;
+}
+
+
+int am_i_winning(struct world_t* world,struct graph_t* graph,unsigned int id_playeur,unsigned int** quenns,unsigned int queens_num,unsigned int width){
+    int quit =1;
+    for (unsigned int j=0; j<queens_num && quit;j++){
+            unsigned int queen_pos = quenns[id_playeur][j];
+            unsigned int new_queen_pos = queen_pos;
+        for (int k = graph->t->p[queen_pos]; k < graph->t->p[queen_pos + 1] && quit; k++) { 
+            unsigned int dir = gsl_spmatrix_uint_get(graph->t, queen_pos, graph->t->i[k]);
+            new_queen_pos = get_next_postion(queen_pos, dir,width);
+            if((world->idx[new_queen_pos] != NO_SORT) && (new_queen_pos!=queen_pos))
+                quit = 0;  
+        } 
+    }
+    return quit;
+}
+
 int main(int argc, char* argv[])
 {
     printf("[-] Server running\n\n");
@@ -189,6 +241,14 @@ int main(int argc, char* argv[])
             world->idx[move.queen_dst] = world->idx[move.queen_src];
             world->idx[move.queen_src] = NO_SORT;
             world->idx[move.arrow_dst] = BLOCK;
+            for(int i=0;i<num_queens;i++){
+                if(queens[turn%2][i] == move.queen_src )
+                    queens[turn%2][i]= move.queen_dst;
+            }
+        }
+        if (am_i_winning(world,&graph,(turn+1)%2,queens,num_queens,width)){
+            turn = game_time;
+            puts("j'ai gagné les biatch ! ");
         }
         turn = turn + 1;
         print_world(world);
