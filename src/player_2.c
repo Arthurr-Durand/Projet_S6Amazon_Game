@@ -24,7 +24,7 @@ struct move_t first_move = {-1, -1, -1};
 
 char const* get_player_name()
 {
-    const char* bot = "TOTO";
+    const char* bot = "LuXeL";
 
     return bot;
 }
@@ -125,9 +125,6 @@ struct move_t play(struct move_t previous_move)
     unsigned int queen_position;
     unsigned int new_queen_position;
 
-    printf("previous move");
-    print_move(previous_move);
-
     if (previous_move.queen_src != UINT_MAX) {
         for (unsigned int i = 0; i < data.num_queens; i++) {
             unsigned int* queen = &data.queens[(data.id + 1) % NUM_PLAYERS][i];
@@ -138,15 +135,6 @@ struct move_t play(struct move_t previous_move)
         data.world[previous_move.queen_dst] = 1;
         data.world[previous_move.arrow_dst] = 1;
     }
-
-    printf("queens before [ ");
-    for (int j = 0; j < NUM_PLAYERS; j++) {
-        for (unsigned int i = 0; i < data.num_queens; i++) {
-            printf("%d ", data.queens[j][i]);
-        }
-        printf("\t");
-    }
-    printf("]\n");
 
     unsigned int find = 0;
     for (unsigned int queen_nb = 0; (queen_nb < data.num_queens && !find); queen_nb++) { // For each queen
@@ -170,17 +158,6 @@ struct move_t play(struct move_t previous_move)
 
     data.world[next_move.arrow_dst] = 1;
 
-    printf("next move");
-    print_move(next_move);
-
-    printf("queens after [ ");
-    for (int j = 0; j < NUM_PLAYERS; j++) {
-        for (unsigned int i = 0; i < data.num_queens; i++) {
-            printf("%d ", data.queens[j][i]);
-        }
-        printf("\t");
-    }
-    printf("]\n");
     return next_move;
 }
 

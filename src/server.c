@@ -23,18 +23,18 @@ struct player {
     enum player_color color;
 };
 
-char const* start_player(char const* player_1, char const* player_2)
+struct player* start_player(struct player* player_1, struct player* player_2)
 {
     if (rand() % 2 == 0)
         return player_1;
     return player_2;
 }
 
-struct player* compute_next_player(struct moves_t* moves, struct player* player_1, struct player* player_2)
+struct player* compute_next_player(struct player* current, struct player* player_1, struct player* player_2)
 {
-    if (player_1->color == (moves->current % 2))
-        return player_1;
-    return player_2;
+    if (player_1->color == current->color)
+        return player_2;
+    return player_1;
 }
 
 enum player_color sort_to_player_color(enum sort sort) {
@@ -46,7 +46,7 @@ enum sort player_color_to_sort(enum player_color color)
     return (color == BLACK ) ? B_QUEEN : W_QUEEN;
 }
 
-unsigned int get_next_postion(unsigned int position, unsigned int dir,int size)
+unsigned int get_next_postion(unsigned int position, unsigned int dir, int size)
 {
     unsigned int new_position = position;
 
@@ -83,19 +83,28 @@ unsigned int get_next_postion(unsigned int position, unsigned int dir,int size)
 }
 
 
-int am_i_winning(struct world_t* world,struct graph_t* graph,unsigned int id_playeur,unsigned int** quenns,unsigned int queens_num,unsigned int width){
-    int quit =1;
-    for (unsigned int j=0; j<queens_num && quit;j++){
-            unsigned int queen_pos = quenns[id_playeur][j];
+int am_i_winning(struct world_t* world, struct graph_t* graph, unsigned int id_playeur, unsigned int** queens, unsigned int queens_num){
+    for (unsigned int j=0; j<queens_num;j++){
+            unsigned int queen_pos = queens[id_playeur][j];
             unsigned int new_queen_pos = queen_pos;
-        for (int k = graph->t->p[queen_pos]; k < graph->t->p[queen_pos + 1] && quit; k++) { 
+        for (int k = graph->t->p[queen_pos]; k < graph->t->p[queen_pos + 1]; k++) { 
             unsigned int dir = gsl_spmatrix_uint_get(graph->t, queen_pos, graph->t->i[k]);
-            new_queen_pos = get_next_postion(queen_pos, dir,width);
-            if((world->idx[new_queen_pos] != NO_SORT) && (new_queen_pos!=queen_pos))
-                quit = 0;  
+            new_queen_pos = get_next_postion(queen_pos, dir, world->width);
+            if((world->idx[new_queen_pos] == NO_SORT) && (new_queen_pos!=queen_pos))
+                return 0;
         } 
     }
-    return quit;
+    return 1;
+}
+
+void end_game(struct world_t* world, struct graph_t graph, unsigned int** queens, struct moves_t* moves, struct player player_1, struct player player_2)
+{
+    free_world(world);
+    free_queens(queens);
+    free_moves(moves);
+    gsl_spmatrix_uint_free(graph.t);
+    player_1.finalize();
+    player_2.finalize();
 }
 
 int main(int argc, char* argv[])
@@ -197,13 +206,13 @@ int main(int argc, char* argv[])
 
     srand(time(NULL));
 
-    char const* first_player = start_player(iencly.get_player_name(), internet.get_player_name());
+    struct player* current_player = start_player(&iencly, &internet);
 
-    iencly.color = (iencly.get_player_name() == first_player) ? BLACK : WHITE;
-    internet.color = (internet.get_player_name() == first_player) ? BLACK : WHITE;
+    iencly.color = (iencly.get_player_name() == current_player->get_player_name()) ? BLACK : WHITE;
+    internet.color = (internet.get_player_name() == current_player->get_player_name()) ? BLACK : WHITE;
 
     struct graph_t graph = { width * width, graph_init(width, w_type) };
-    struct world_t * world = world_init(width);
+    struct world_t* world = world_init(width);
     
     int num_queens = 4*(width/10 + 1);
     unsigned int* queens[NUM_PLAYERS];
@@ -220,21 +229,19 @@ int main(int argc, char* argv[])
     moves->t[0] = move;
     moves->current = 0;
     
-    struct player* current_player;
-    int game_time = 15;
-    int turn = 0;
-    //int tries[2] = {};
-    //int max_try = 5;
-    // while (???)
-    //on fait un compte de tentative par tour, et on fait un compte de tentative
+    current_player = compute_next_player(current_player, &iencly, &internet);
     print_world(world);
-    while ( (turn < game_time) ){//&& (tries[0] < max_try ) && ( tries[1] < max_try ) ){
-        current_player = compute_next_player(moves, &iencly, &internet);
+    while (!am_i_winning(world, &graph, current_player->color, queens, num_queens)){
         move = current_player->play(move);
-        //printf("valide ? %d", !is_move_valid(&graph, world, moves, move));
+
+        printf("[-] %s played ", current_player->get_player_name());
+        print_move(move);
+        printf("\n");
+
         if (!is_move_valid(&graph, world, move) || (current_player->color != sort_to_player_color(world->idx[move.queen_src]))){
-	//tries[current_player->color]++;
-            printf("invalid move\n");
+            printf("[-] %s made an illegal move !\n", current_player->get_player_name());
+            current_player = compute_next_player(current_player, &iencly, &internet);
+            break;
 	    }
         else {
             moves = moves_add(moves, move);
@@ -242,25 +249,21 @@ int main(int argc, char* argv[])
             world->idx[move.queen_src] = NO_SORT;
             world->idx[move.arrow_dst] = BLOCK;
             for(int i=0;i<num_queens;i++){
-                if(queens[turn%2][i] == move.queen_src )
-                    queens[turn%2][i]= move.queen_dst;
+                if(queens[current_player->color][i] == move.queen_src )
+                    queens[current_player->color][i]= move.queen_dst;
             }
         }
-        if (am_i_winning(world,&graph,(turn+1)%2,queens,num_queens,width)){
-            turn = game_time;
-            puts("j'ai gagné les biatch ! ");
-        }
-        turn = turn + 1;
         print_world(world);
+        current_player = compute_next_player(current_player, &iencly, &internet);
     }
+
+    printf("[-] %s as won !\n\n", compute_next_player(current_player, &iencly, &internet)->get_player_name());
+
+    end_game(world, graph, queens, moves, iencly, internet);
     
-    free_world(world);
-    free_queens(queens);
-    free_moves(moves);
-    gsl_spmatrix_uint_free(graph.t);
-    iencly.finalize();
-    internet.finalize();
+    printf("[-] Closing client 1\n\n");
     dlclose(player_1);
+    printf("[-] Closing client 2\n");
     dlclose(player_2);
     
     return EXIT_SUCCESS;
