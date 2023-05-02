@@ -50,7 +50,7 @@ void test_get_player_name(char const* (*get_player_name)())
 {
     printf("\t%s", __func__);
 
-    assert(!strcmp((*get_player_name)(), "BOTTES de Anton"));
+    assert(!strcmp((*get_player_name)(), "ArThUr"));
     
     printf("\tOK\n");
 }
