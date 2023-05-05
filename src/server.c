@@ -233,7 +233,7 @@ int main(int argc, char* argv[])
     print_world(world);
     while (!am_i_winning(world, &graph, current_player->color, queens, num_queens)){
         move = current_player->play(move);
-
+        printf("\n%d %d %d\n", move.queen_src, move.queen_dst, move.arrow_dst);
         printf("[-] %s played ", current_player->get_player_name());
         print_move(move);
         printf("\n");

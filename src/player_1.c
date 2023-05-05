@@ -51,16 +51,8 @@ void initialize(unsigned int player_id, struct graph_t* graph, unsigned int num_
     for (unsigned int i = 0; i < NUM_PLAYERS; i++) {
         for (unsigned int j = 0; j < num_queens; j++) {
             data.world[data.queens[i][j]] = 1;
-            printf("%d\n",data.queens[i][j]);
         }
     }
-    int prout =0;
-    for (unsigned int i = 0; i < data.size; i++) {
-        if(data.world[i]==1)
-            prout+=1;
-        
-    }
-    printf("%d",NUM_PLAYERS);
     data.graph = malloc(sizeof(struct graph_t));
     data.graph->num_vertices = graph->num_vertices;
     gsl_spmatrix_uint* tmp = gsl_spmatrix_uint_alloc(graph->t->size1, graph->t->size2);
@@ -183,31 +175,29 @@ unsigned int tiiir(unsigned int queen_pos)
         if (arrow_pos != queen_pos)
             find = 1;
     }
-    // for ( int i = 0; i < rand() % 20; i++) // A changer imperativement par width
-    // {
-    //     int here=0;
-    //     for (int k = data.graph->t->p[arrow_pos]; k < data.graph->t->p[arrow_pos + 1] && !here; k++)
-    //     { // For each accessible directions
-    //         unsigned int dir2 = gsl_spmatrix_uint_get(data.graph->t, arrow_pos, data.graph->t->i[k]);
-    //         if (dir2 == dir){ // On verifie que la fleche peut aller dans cette dir
-    //             unsigned int old_arrow_pos = arrow_pos;
-    //             arrow_pos = get_next_postion(arrow_pos, dir);
-    //             if ((arrow_pos == old_arrow_pos) || next_to_enemie_queen(arrow_pos))
-    //                 return arrow_pos;
-    //             here = 1;
-    //         }
-    //     }
-    // }
-    printf("%d", data.world[arrow_pos]);
+    for (unsigned int i = 0; i < rand() % data.graph->t->size1; i++) // A changer imperativement par width
+    {
+        int here = 0;
+        for (int k = data.graph->t->p[arrow_pos]; k < data.graph->t->p[arrow_pos + 1] && !here; k++) { // For each accessible directions
+            unsigned int dir2 = gsl_spmatrix_uint_get(data.graph->t, arrow_pos, data.graph->t->i[k]);
+            if (dir2 == dir) { // On verifie que la fleche peut aller dans cette dir
+                unsigned int old_arrow_pos = arrow_pos;
+                arrow_pos = get_next_postion(arrow_pos, dir);
+                if ((arrow_pos == old_arrow_pos) || next_to_enemie_queen(arrow_pos))
+                    return arrow_pos;
+                here = 1;
+            }
+        }
+    }
     return arrow_pos;
 }
 
 struct move_t play(struct move_t previous_move)
 {
     struct move_t next_move;
-    unsigned int queen_position;
-    unsigned int new_queen_position;
-
+    unsigned int queen_position = previous_move.queen_src;
+    unsigned int new_queen_position = previous_move.queen_src;
+    printf("coucou");
     if (previous_move.queen_src != UINT_MAX) {
         for (unsigned int i = 0; i < data.num_queens; i++) {
             unsigned int* queen = &data.queens[(data.id + 1) % NUM_PLAYERS][i];
@@ -220,20 +210,47 @@ struct move_t play(struct move_t previous_move)
     }
 
     unsigned int find = 0;
+    unsigned int rd_dir = 0;
     for (unsigned int queen_nb = 0; (queen_nb < data.num_queens && !find); queen_nb++) { // For each queen
         queen_position = data.queens[data.id][queen_nb];
+        int t = 0;
+        unsigned int all_dir[NUM_DIRS];
+        for (int i=0; i < NUM_DIRS-1; i++)
+            all_dir[i] = 0;
         for (int k = data.graph->t->p[queen_position]; k < data.graph->t->p[queen_position + 1] && !find; k++) { // For each accessible directions
             unsigned int dir = gsl_spmatrix_uint_get(data.graph->t, queen_position, data.graph->t->i[k]);
-            new_queen_position = get_next_postion(queen_position, dir);
-            if (new_queen_position != queen_position && data.world[new_queen_position] == 0) { // If the position is reachable (no queen + no arrow)
-                next_move.queen_src = queen_position;
-                next_move.queen_dst = new_queen_position;
-                data.queens[data.id][queen_nb] = new_queen_position;
-                find = 1;
-            }
+            all_dir[t] = dir;
+            t += 1;
+        }
+        int z=0;
+        while(z<64){
+        unsigned int rd_t = rand() % t;
+        rd_dir = all_dir[rd_t];
+        new_queen_position = get_next_postion(queen_position, rd_dir);
+        if (new_queen_position != queen_position && data.world[new_queen_position] == 0) { // If the position is reachable (no queen + no arrow)
+            next_move.queen_src = queen_position;
+            next_move.queen_dst = new_queen_position;
+            data.queens[data.id][queen_nb] = new_queen_position;
+            find = 1;
+        }
+        z+=1;
         }
     }
 
+    // for (unsigned int i = 0; i < rand() % data.graph->t->size1; i++) // A changer imperativement par width
+    // {
+    //     int here = 0;
+    //     for (int k = data.graph->t->p[new_queen_position]; k < data.graph->t->p[new_queen_position + 1] && !here; k++) { // For each accessible directions
+    //         unsigned int dir2 = gsl_spmatrix_uint_get(data.graph->t, new_queen_position, data.graph->t->i[k]);
+
+    //         if (dir2 == rd_dir) { // On verifie que la fleche peut aller dans cette dir
+    //             unsigned int old_queen_pos = new_queen_position;
+    //             if (get_next_postion(new_queen_position,rd_dir)== old_queen_pos)
+    //                 here = 1;
+    //         }
+    //     }
+    // }
+    printf("\n %d\t %d\n",new_queen_position,queen_position);
     data.world[queen_position] = 0;
     data.world[new_queen_position] = 1;
 
