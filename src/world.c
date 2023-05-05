@@ -80,22 +80,22 @@ unsigned int** compute_queens_pos(int m, struct world_t* world, int num_queens, 
   
     for(int i = 0; i < num_queens / 4; i++) {
         world->idx[2 * i + 1] = B_QUEEN;
-        queens[0][0] = 2 * i + 1;
+        queens[0][4 * i] = 2 * i + 1;
         world->idx[m - 1 - (2 * i + 1)] = B_QUEEN;
-        queens[0][1] = m - 1 - (2 * i + 1);
+        queens[0][4 * i + 1] = m - 1 - (2 * i + 1);
         world->idx[(2 * i + 1) * m] = B_QUEEN;
-        queens[0][2] = (2 * i + 1) * m;
+        queens[0][4 * i + 2] = (2 * i + 1) * m;
         world->idx[(2 * i + 2) * m - 1] = B_QUEEN;
-        queens[0][3] = (2 * i + 2) * m - 1;
+        queens[0][4 * i + 3] = (2 * i + 2) * m - 1;
     
         world->idx[m * m - m + 2 * i + 1] = W_QUEEN;
-        queens[1][0] = m * m - m + 2 * i + 1;
+        queens[1][4 * i] = m * m - m + 2 * i + 1;
         world->idx[m * m - m -  (2 * i + 1) * m] = W_QUEEN;
-        queens[1][1] = m * m - m -  (2 * i + 1) * m;
+        queens[1][4 * i + 1] = m * m - m -  (2 * i + 1) * m;
         world->idx[m * m - 1 -  (2 * i + 1) * m] = W_QUEEN;
-        queens[1][2] = m * m - 1 -  (2 * i + 1) * m;
+        queens[1][4 * i + 2] = m * m - 1 -  (2 * i + 1) * m;
         world->idx[m * m - 1 - (2 * i + 1 )] = W_QUEEN;
-        queens[1][3] = m * m - 1 - (2 * i + 1 );
+        queens[1][4 * i + 3] = m * m - 1 - (2 * i + 1 );
     }
     return queens;
 }
