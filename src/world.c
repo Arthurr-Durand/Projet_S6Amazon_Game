@@ -109,6 +109,7 @@ void free_world(struct world_t* world)
     free(world);
 }
 
+const char* board_thing[4] ={"\u25A1","\u2686","\u2688","\u2915"};
 /*
   c'est dans le nom de la fonction XD
 */
@@ -117,7 +118,7 @@ void print_world(struct world_t* world)
     int size = world->width;
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
-            printf("%d ", world->idx[j + i * size]);
+            printf("%s ",board_thing[world->idx[j + i * size]]);
         }
         printf("\n");
     }
