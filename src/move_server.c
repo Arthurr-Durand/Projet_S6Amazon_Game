@@ -46,9 +46,17 @@ int obstacle(struct graph_t* graph, struct world_t* world, unsigned int src, uns
     return 1;
 }
 
-int is_move_valid(struct graph_t* graph, struct world_t* world, struct move_t new_move)
-{
-    return !(not_in_world(world->width * world->width, new_move) || obstacle(graph, world, new_move.queen_src, new_move.queen_dst) || (!(new_move.queen_src == new_move.arrow_dst) && obstacle(graph, world, new_move.queen_dst, new_move.arrow_dst)));
+int is_move_valid(struct graph_t* graph, struct world_t* world, struct move_t new_move) {
+  if(!(not_in_world(world->width * world->width, new_move)) && !(obstacle(graph, world, new_move.queen_src, new_move.queen_dst))) { 
+    enum sort old_sort = world->idx[new_move.queen_src];
+    world->idx[new_move.queen_src] = NO_SORT;
+    if (!(obstacle(graph, world, new_move.queen_dst, new_move.arrow_dst))) {
+      world->idx[new_move.queen_src] = old_sort;
+      return 1;
+    }
+    world->idx[new_move.queen_src] = old_sort;
+  }
+  return 0;
 }
 
 unsigned int exists_neighbor(struct graph_t* graph, enum dir_t dir, unsigned int current) {
