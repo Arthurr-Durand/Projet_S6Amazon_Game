@@ -264,7 +264,6 @@ struct move_t play(struct move_t previous_move)
                 next_move.queen_src = queen_position;
                 next_move.queen_dst = new_queen_position;
                 data.queens[data.id][queen_nb] = new_queen_position;
-                find = 1;
                 z = 151;
             }
             z += 1;
@@ -282,8 +281,10 @@ struct move_t play(struct move_t previous_move)
                     unsigned int old_queen_pos = new_queen_position;
                     new_queen_position = get_next_postion(new_queen_position, rd_dir);
                     data.queens[data.id][queen_nb] = new_queen_position;
-                    if (new_queen_position == old_queen_pos)
+                    if (new_queen_position == old_queen_pos){
                         here = 1;
+                        find = 1;
+                    }
                 }
             }
         }
