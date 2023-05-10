@@ -189,7 +189,7 @@ unsigned int tiiir(unsigned int queen_pos)
     }
 
     int z = 0;
-    while (z < 150)//To find a random direction 
+    while (z < 150) // To find a random direction
     {
         unsigned int rd_t = rand() % t;
         rd_dir = all_dir[rd_t];
@@ -201,14 +201,14 @@ unsigned int tiiir(unsigned int queen_pos)
         z += 1;
     }
 
-    for (unsigned int i = 0; i < rand() % data.graph->t->size1; i++) //To move x times (x random and x<=WIDTH)
+    for (unsigned int i = 0; i < rand() % data.graph->t->size1; i++) // To move x times (x random and x<=WIDTH)
     {
         int here = 0;
         for (int k = data.graph->t->p[arrow_pos]; k < data.graph->t->p[arrow_pos + 1] && !here; k++)
         { // For each accessible directions
             unsigned int dir2 = gsl_spmatrix_uint_get(data.graph->t, arrow_pos, data.graph->t->i[k]);
             if (dir2 == rd_dir)
-            {  //Checking the awairness of the dir 
+            { // Checking the awairness of the dir
                 unsigned int old_arrow_pos = arrow_pos;
                 arrow_pos = get_next_postion(arrow_pos, rd_dir);
                 if ((arrow_pos == old_arrow_pos) || next_to_enemie_queen(arrow_pos))
@@ -225,7 +225,7 @@ struct move_t play(struct move_t previous_move)
     struct move_t next_move;
     unsigned int queen_position;
     unsigned int new_queen_position;
-    if (previous_move.queen_src != UINT_MAX)//Actalize the world
+    if (previous_move.queen_src != UINT_MAX) // Actalize the world
     {
         for (unsigned int i = 0; i < data.num_queens; i++)
         {
@@ -241,11 +241,11 @@ struct move_t play(struct move_t previous_move)
     unsigned int find = 0;
     unsigned int rd_dir = 0;
     unsigned int allqueens = 0;
-    while ((allqueens<data.num_queens*data.num_queens) && !find)
+    while ((allqueens < data.num_queens * data.num_queens) && !find)
     { // For each queen
-        unsigned int rd_queen = rand()%data.num_queens;
+        unsigned int rd_queen = rand() % data.num_queens;
         queen_position = data.queens[data.id][rd_queen];
-        next_move.queen_src=queen_position;
+        next_move.queen_src = queen_position;
         int t = 0;
         unsigned int all_dir[NUM_DIRS];
         for (int i = 0; i < NUM_DIRS - 1; i++)
@@ -257,7 +257,7 @@ struct move_t play(struct move_t previous_move)
             t += 1;
         }
         int z = 0;
-        while (z < 150)//To find a random direction 
+        while (z < 150) // To find a random direction
         {
             unsigned int rd_t = rand() % t;
             rd_dir = all_dir[rd_t];
@@ -272,39 +272,33 @@ struct move_t play(struct move_t previous_move)
             z++;
         }
         int here = 0;
-        printf("(%d %d)\n",next_move.queen_src,next_move.queen_dst);
-        for (unsigned int i = 0; (i < (rand() % data.graph->t->size1)) && (find) && (!here); i++) //To move x times (x random and x<=WIDTH) 
+        for (unsigned int i = 0; (i < (rand() % data.graph->t->size1)) && (find) && (!here); i++) // To move x times (x random and x<=WIDTH)
         {
 
             for (int k = data.graph->t->p[new_queen_position]; k < data.graph->t->p[new_queen_position + 1] && !here; k++)
             { // For each accessible directions
                 unsigned int dir2 = gsl_spmatrix_uint_get(data.graph->t, new_queen_position, data.graph->t->i[k]);
                 if (dir2 == rd_dir)
-                { //Checking the awairness of the dir 
-                   printf("hey\n");
+                { // Checking the awairness of the dir
+                    printf("hey\n");
                     unsigned int old_queen_pos = new_queen_position;
                     new_queen_position = get_next_postion(new_queen_position, rd_dir);
                     data.queens[data.id][rd_queen] = new_queen_position;
-                    if (new_queen_position == old_queen_pos){
+                    if (new_queen_position == old_queen_pos)
+                    {
                         here = 1;
                     }
                 }
             }
         }
         allqueens++;
-       printf("[%d]",allqueens);
     }
 
-
     next_move.queen_dst = new_queen_position;
- //   printf("\n%d %d\n",next_move.queen_src,next_move.queen_dst);
     data.world[queen_position] = 0;
     data.world[new_queen_position] = 1;
-
     next_move.arrow_dst = tiiir(new_queen_position);
-
     data.world[next_move.arrow_dst] = 1;
-
     return next_move;
 }
 
