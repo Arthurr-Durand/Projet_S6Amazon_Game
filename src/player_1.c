@@ -280,7 +280,7 @@ struct move_t play(struct move_t previous_move)
                 unsigned int dir2 = gsl_spmatrix_uint_get(data.graph->t, new_queen_position, data.graph->t->i[k]);
                 if (dir2 == rd_dir)
                 { // Checking the awairness of the dir
-                    printf("hey\n");
+
                     unsigned int old_queen_pos = new_queen_position;
                     new_queen_position = get_next_postion(new_queen_position, rd_dir);
                     data.queens[data.id][rd_queen] = new_queen_position;
