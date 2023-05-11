@@ -26,7 +26,7 @@ struct world_t {
 
 gsl_spmatrix_uint* graph_init(int m, enum type_world t);
 
-gsl_spmatrix_uint* squared_graph(int m);
+gsl_spmatrix_uint* squared_graph(int m,int);
 
 struct world_t * world_init(int width);
 
