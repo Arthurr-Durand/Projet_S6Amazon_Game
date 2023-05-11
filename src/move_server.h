@@ -7,9 +7,13 @@
 
 struct moves_t* moves_add(struct moves_t* moves, struct move_t move);
 
-int is_move_valid(struct graph_t* graph, struct world_t* world, struct move_t new_move);
+int not_in_world(unsigned int size, struct move_t new_move);
 
-void dirs_possible(enum dir_t* dirs, unsigned int src, unsigned int dst);
+enum dir_t get_direction(int size, int src, int dst);
+
+int obstacle(struct graph_t* graph, struct world_t* world, unsigned int src, unsigned int dst);
+
+int is_move_valid(struct graph_t* graph, struct world_t* world, struct move_t new_move);
 
 unsigned int exists_neighbor(struct graph_t* graph, enum dir_t dir, unsigned int current);
 

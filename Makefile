@@ -10,20 +10,22 @@ all: build
 build: client server
 
 server:
-	$(CC) $(CFLAGS) -o install/server src/server.c src/world.c src/tools.c src/move_server.c $(LDFLAGS)
+	$(CC) $(CFLAGS) -o install/server src/server.c src/world.c src/tools.c src/move_server.c src/game.c $(LDFLAGS)
 
 client:
 	mkdir -p install
-	$(CC) $(CFLAGS) -shared -o install/client1.so src/player_1.c src/move_server.c
-	$(CC) $(CFLAGS) -shared -o install/client2.so src/player_2.c src/move_server.c
-# move_server là pour afficher pdt le begug, à enlever après
+	$(CC) $(CFLAGS) -shared -o install/client1.so src/player_1.c
+	$(CC) $(CFLAGS) -shared -o install/client2.so src/player_2.c
 
-alltests:
-	$(CC) $(CFLAGS) -o  install/alltests tst/test_client1.c src/world.c $(LDFLAGS) -I src/ -ldl --coverage -lgcov
+alltests: client
+#	$(CC) $(CFLAGS) -o  install/alltests tst/test_client1.c tst/test_move_server.c src/world.c src/move_server.c $(LDFLAGS) -I src/ -ldl --coverage -lgcov
+#   $(CC) $(CFLAGS) -o  install/alltests tst/test_move_server.c src/world.c src/move_server.c $(LDFLAGS) -I src/ -ldl --coverage -lgcov
+#	$(CC) $(CFLAGS) -o  install/alltests tst/test_world.c src/world.c $(LDFLAGS) -I src/ -ldl --coverage -lgcov
+	$(CC) $(CFLAGS) -o  install/alltests tst/test_game.c src/world.c src/move_server.c src/game.c $(LDFLAGS) -I src/ -ldl --coverage -lgcov
 
 test: alltests
 
-runtest: test	
+runtest: clean test
 	./install/alltests
 
 runserver: build

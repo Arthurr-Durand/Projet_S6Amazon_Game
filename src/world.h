@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "graph.h"
 #include "player.h"
+#include "dir.h"
 
 enum type_world {
   SQUARED = 0,
@@ -30,11 +31,15 @@ gsl_spmatrix_uint* squared_graph(int m,int);
 
 struct world_t * world_init(int width);
 
+enum sort world_get(struct world_t* world, unsigned int i);
+
+void world_set(struct world_t* world, unsigned int i, enum sort s);
+
 void free_world(struct world_t * world);
 
 void print_world(struct world_t * world);
 
-unsigned int** compute_queens_pos(int m, struct world_t* world, int num_queens, unsigned int* queens[NUM_PLAYERS]);
+void compute_queens_pos(int m, struct world_t* world, int num_queens, unsigned int* queens[NUM_PLAYERS]);
 
 void free_queens(unsigned int* queens[]);
 
