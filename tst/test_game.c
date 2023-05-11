@@ -94,6 +94,10 @@ void am_i_wining__test()
     assert(am_i_winning(world, &graph, BLACK, queens, 4) == 0);
     assert(am_i_winning(world, &graph, WHITE, queens, 4) == 1);
 
+    free_world(world);
+    free_queens(queens);
+    gsl_spmatrix_uint_free(graph.t);
+
     printf("\tOK\n");
 }
 
@@ -130,7 +134,6 @@ int main()
     am_i_wining__test();
 
     dlclose(player_1);
-
     dlclose(player_2);
 
     return EXIT_SUCCESS;
