@@ -74,27 +74,37 @@ struct world_t* world_init(int width)
     return world;
 }
 
+enum sort world_get(struct world_t* world, unsigned int i)
+{
+    return world->idx[i];
+}
+
+void world_set(struct world_t* world, unsigned int i, enum sort s)
+{
+    world->idx[i] = s;
+}
+
 
 unsigned int** compute_queens_pos(int m, struct world_t* world, int num_queens, unsigned int* queens[NUM_PLAYERS]) {
     //int test  = (m - (num_queens / 2)) / ((num_queens /2) + 1);
   
     for(int i = 0; i < num_queens / 4; i++) {
-        world->idx[2 * i + 1] = B_QUEEN;
+        world_set(world, 2 * i + 1, B_QUEEN);
         queens[0][4 * i] = 2 * i + 1;
-        world->idx[m - 1 - (2 * i + 1)] = B_QUEEN;
+        world_set(world, m - 1 - (2 * i + 1), B_QUEEN);
         queens[0][4 * i + 1] = m - 1 - (2 * i + 1);
-        world->idx[(2 * i + 1) * m] = B_QUEEN;
+        world_set(world, (2 * i + 1) * m, B_QUEEN);
         queens[0][4 * i + 2] = (2 * i + 1) * m;
-        world->idx[(2 * i + 2) * m - 1] = B_QUEEN;
+        world_set(world, (2 * i + 2) * m - 1, B_QUEEN);
         queens[0][4 * i + 3] = (2 * i + 2) * m - 1;
     
-        world->idx[m * m - m + 2 * i + 1] = W_QUEEN;
+        world_set(world, m * m - m + 2 * i + 1, W_QUEEN);
         queens[1][4 * i] = m * m - m + 2 * i + 1;
-        world->idx[m * m - m -  (2 * i + 1) * m] = W_QUEEN;
+        world_set(world, m * m - m - (2 * i + 1) * m, W_QUEEN);
         queens[1][4 * i + 1] = m * m - m -  (2 * i + 1) * m;
-        world->idx[m * m - 1 -  (2 * i + 1) * m] = W_QUEEN;
+        world_set(world, m * m - 1 - (2 * i + 1) * m, W_QUEEN);
         queens[1][4 * i + 2] = m * m - 1 -  (2 * i + 1) * m;
-        world->idx[m * m - 1 - (2 * i + 1 )] = W_QUEEN;
+        world_set(world, m * m - 1 - (2 * i + 1 ), W_QUEEN);
         queens[1][4 * i + 3] = m * m - 1 - (2 * i + 1 );
     }
     return queens;

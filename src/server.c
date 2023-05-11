@@ -245,9 +245,9 @@ int main(int argc, char* argv[])
 	    }
         else {
             moves = moves_add(moves, move);
-            world->idx[move.queen_dst] = world->idx[move.queen_src];
-            world->idx[move.queen_src] = NO_SORT;
-            world->idx[move.arrow_dst] = BLOCK;
+            world_set(world, move.queen_dst, world_get(world, move.queen_src));
+            world_set(world, move.queen_src, NO_SORT);
+            world_set(world, move.arrow_dst, BLOCK);
             for(int i=0;i<num_queens;i++){
                 if(queens[current_player->color][i] == move.queen_src )
                     queens[current_player->color][i]= move.queen_dst;

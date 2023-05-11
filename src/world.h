@@ -30,6 +30,10 @@ gsl_spmatrix_uint* squared_graph(int m);
 
 struct world_t * world_init(int width);
 
+enum sort world_get(struct world_t* world, unsigned int i);
+
+void world_set(struct world_t* world, unsigned int i, enum sort s);
+
 void free_world(struct world_t * world);
 
 void print_world(struct world_t * world);
