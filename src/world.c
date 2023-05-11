@@ -1,5 +1,4 @@
 #include "world.h"
-#include "dir.h"
 
 gsl_spmatrix_uint* graph_init(int m, enum type_world t)
 {
@@ -58,22 +57,6 @@ gsl_spmatrix_uint* squared_graph(int size)
     return csr;
 }
 
-/*
-  Tableau alloué dynamiquement représentant le plateau jeu qui sera modifié tout au long de la partie
-*/
-struct world_t* world_init(int width)
-{
-    int WORLD_SIZE = width * width;
-    struct world_t* world = malloc(sizeof(struct world_t));
-    world->width = width;
-    world->idx = malloc(sizeof(enum sort) * (WORLD_SIZE));
-    for (int i = 0; i < WORLD_SIZE; i++) {
-        world->idx[i] = 0;
-    }
-
-    return world;
-}
-
 enum sort world_get(struct world_t* world, unsigned int i)
 {
     return world->idx[i];
@@ -84,8 +67,23 @@ void world_set(struct world_t* world, unsigned int i, enum sort s)
     world->idx[i] = s;
 }
 
+/*
+  Tableau alloué dynamiquement représentant le plateau jeu qui sera modifié tout au long de la partie
+*/
+struct world_t* world_init(int width)
+{
+    int WORLD_SIZE = width * width;
+    struct world_t* world = malloc(sizeof(struct world_t));
+    world->width = width;
+    world->idx = malloc(sizeof(enum sort) * (WORLD_SIZE));
+    for (int i = 0; i < WORLD_SIZE; i++) {
+        world_set(world, i, NO_SORT);
+    }
 
-unsigned int** compute_queens_pos(int m, struct world_t* world, int num_queens, unsigned int* queens[NUM_PLAYERS]) {
+    return world;
+}
+
+void compute_queens_pos(int m, struct world_t* world, int num_queens, unsigned int* queens[NUM_PLAYERS]) {
     //int test  = (m - (num_queens / 2)) / ((num_queens /2) + 1);
   
     for(int i = 0; i < num_queens / 4; i++) {
@@ -107,7 +105,6 @@ unsigned int** compute_queens_pos(int m, struct world_t* world, int num_queens, 
         world_set(world, m * m - 1 - (2 * i + 1 ), W_QUEEN);
         queens[1][4 * i + 3] = m * m - 1 - (2 * i + 1 );
     }
-    return queens;
 }
 
 /*
@@ -119,7 +116,8 @@ void free_world(struct world_t* world)
     free(world);
 }
 
-const char* board_thing[4] ={"\u25A1","\u2686","\u2688","\u2915"};
+const char* board_thing[4] = {"\u25A1","\u2686","\u2688","\u2915"};
+
 /*
   c'est dans le nom de la fonction XD
 */
@@ -128,7 +126,7 @@ void print_world(struct world_t* world)
     int size = world->width;
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
-            printf("%s ",board_thing[world->idx[j + i * size]]);
+            printf("%s ", board_thing[world_get(world, j + i * size)]);
         }
         printf("\n");
     }

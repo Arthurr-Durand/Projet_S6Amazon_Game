@@ -19,7 +19,8 @@ client:
 
 alltests:
 	# $(CC) $(CFLAGS) -o  install/alltests tst/test_client1.c tst/test_move_server.c src/world.c src/move_server.c $(LDFLAGS) -I src/ -ldl --coverage -lgcov
-	$(CC) $(CFLAGS) -o  install/alltests tst/test_move_server.c src/world.c src/move_server.c $(LDFLAGS) -I src/ -ldl --coverage -lgcov
+	# $(CC) $(CFLAGS) -o  install/alltests tst/test_move_server.c src/world.c src/move_server.c $(LDFLAGS) -I src/ -ldl --coverage -lgcov
+	$(CC) $(CFLAGS) -o  install/alltests tst/test_world.c src/world.c $(LDFLAGS) -I src/ -ldl --coverage -lgcov
 
 test: alltests
 

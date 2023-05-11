@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "graph.h"
 #include "player.h"
+#include "dir.h"
 
 enum type_world {
   SQUARED = 0,
@@ -38,7 +39,7 @@ void free_world(struct world_t * world);
 
 void print_world(struct world_t * world);
 
-unsigned int** compute_queens_pos(int m, struct world_t* world, int num_queens, unsigned int* queens[NUM_PLAYERS]);
+void compute_queens_pos(int m, struct world_t* world, int num_queens, unsigned int* queens[NUM_PLAYERS]);
 
 void free_queens(unsigned int* queens[]);
 
