@@ -87,7 +87,7 @@ void obstacle__test()
 {
     printf("%s", __func__);
 
-    struct graph_t graph = { 25, graph_init(5, 0) };
+    struct graph_t graph = { 25, graph_init(5, SQUARED) };
 
     struct world_t* world = world_init(5);
 
@@ -114,7 +114,7 @@ void is_move_valid__test()
 {
     printf("%s", __func__);
 
-    struct graph_t graph = { 25, graph_init(5, 0) };
+    struct graph_t graph = { 25, graph_init(5, SQUARED) };
 
     struct world_t* world = world_init(5);
     world_set(world, 22, W_QUEEN);
@@ -139,7 +139,7 @@ void exists_neighbor__test()
 {
     printf("%s", __func__);
 
-    struct graph_t graph = { 25, graph_init(5, 0) };
+    struct graph_t graph = { 25, graph_init(5, SQUARED) };
 
     assert(exists_neighbor(&graph, DIR_SW, 10) == 25);
     assert(exists_neighbor(&graph, DIR_NE, 5) == 1);
