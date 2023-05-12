@@ -24,6 +24,6 @@ test: alltests
 install: server client test
 
 clean:
-	@rm -f *~ src/*~ tst/*~ install/*
+	@rm -f *~ src/*~ tst/*~ install/* doc/*.aux doc/*.toc doc/*.log doc/*.out doc/report.pdf
 
 .PHONY: client install test clean
