@@ -16,17 +16,10 @@ client:
 	$(CC) $(CFLAGS) -shared -o install/client1.so src/player_1.c
 	$(CC) $(CFLAGS) -shared -o install/client2.so src/player_2.c
 
-alltests: build
-	$(CC) $(CFLAGS) -o install/test_client1 tst/test_client1.c src/move_server.c src/world.c $(LDFLAGS) -I src/ -ldl --coverage -lgcov
-	$(CC) $(CFLAGS) -o install/test_game tst/test_game.c src/game.c src/move_server.c src/world.c $(LDFLAGS) -I src/ -ldl --coverage -lgcov
-	$(CC) $(CFLAGS) -o install/test_move_server tst/test_move_server.c src/move_server.c src/world.c $(LDFLAGS) -I src/ -ldl --coverage -lgcov
-	$(CC) $(CFLAGS) -o install/test_world tst/test_world.c src/world.c $(LDFLAGS) -I src/ -ldl --coverage -lgcov
+alltests: client
+	$(CC) $(CFLAGS) -o install/alltests tst/test.c tst/test_client1.c tst/test_game.c tst/test_move_server.c tst/test_world.c src/game.c src/move_server.c src/world.c src/tools.c $(LDFLAGS) -I src/ -ldl --coverage -lgcov
 
 test: alltests
-	./install/test_client1	
-	./install/test_game
-	./install/test_move_server
-	./install/test_world
 
 install: server client test
 

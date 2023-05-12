@@ -1,10 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "world.h"
-#include "tools.h"
-#include "move_server.h"
 
+#include "test_world.h"
 
 void world_init__test()
 {
@@ -92,19 +90,4 @@ void compute_queens_pos__test()
     free_queens(queens);
 
     printf("\tOK\n");
-}
-
-int main()
-{
-    printf("%s\n", __FILE__);
-
-    world_init__test();
-
-    world_set__test();
-
-    world_get__test();
-
-    compute_queens_pos__test();
-
-    return EXIT_SUCCESS;
 }

@@ -2,11 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "world.h"
-#include "tools.h"
-#include "move_server.h"
-#include "game.h"
 
+#include "test_game.h"
 
 void start_player__test(struct player* player1, struct player* player2)
 {
@@ -99,42 +96,4 @@ void am_i_wining__test()
     gsl_spmatrix_uint_free(graph.t);
 
     printf("\t\tOK\n");
-}
-
-int main()
-{
-    printf("%s\n", __FILE__);
-
-    void* player_1;
-    struct player iencly;
-    
-    void* player_2;
-    struct player internet;
-        
-    player_1 = dlopen("./install/client1.so", RTLD_LAZY);
-    iencly.get_player_name = dlsym(player_1, "get_player_name" );
-    iencly.initialize = dlsym(player_1, "initialize" );
-    iencly.play = dlsym(player_1, "play");
-    iencly.finalize = dlsym(player_1, "finalize");
-
-    player_2 = dlopen("./install/client2.so", RTLD_LAZY);
-    internet.get_player_name = dlsym(player_2, "get_player_name" );
-    internet.initialize = dlsym(player_2, "initialize" );
-    internet.play = dlsym(player_2, "play");
-    internet.finalize = dlsym(player_2, "finalize");
-
-    start_player__test(&iencly, &internet);
-
-    compute_next_player__test(&iencly, &internet);
-
-    sort_to_player_color__test();
-
-    player_color_to_sort__test();
-
-    am_i_wining__test();
-
-    dlclose(player_1);
-    dlclose(player_2);
-
-    return EXIT_SUCCESS;
 }

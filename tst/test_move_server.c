@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "world.h"
-#include "tools.h"
-#include "move_server.h"
+
+#include "test_move_server.h"
 
 void moves_add__test()
 {
@@ -149,23 +148,4 @@ void exists_neighbor__test()
     gsl_spmatrix_uint_free(graph.t);
 
     printf("\t\tOK\n");
-}
-
-int main()
-{
-    printf("%s\n", __FILE__);
-
-    moves_add__test();
-
-    not_in_world__test();
-
-    get_direction__test();
-
-    obstacle__test();
-
-    is_move_valid__test();
-
-    exists_neighbor__test();
-
-    return EXIT_SUCCESS;
 }

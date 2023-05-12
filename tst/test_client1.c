@@ -4,9 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../src/graph.h"
-#include "../src/move.h"
-#include "../src/world.h"
+#include "test_client1.h"
 
 #define NUM_PLAYERS 2
 
@@ -164,42 +162,4 @@ void play__test(void (*initialize)(), struct move_t (*play)(), void (*finalize)(
     (*finalize2)();
 
     printf("\t\t\tOK\n");
-}
-
-int main()
-{
-    printf("%s\n", __FILE__);
-
-    void* client;
-    char const* (*get_player_name)();
-    void (*initialize)();
-    struct move_t (*play)();
-    void (*finalize)();
-
-    client = dlopen("./install/client1.so", RTLD_LAZY);
-    get_player_name = dlsym(client, "get_player_name");
-    initialize = dlsym(client, "initialize");
-    play = dlsym(client, "play");
-    finalize = dlsym(client, "finalize");
-
-    void* client2;
-    void (*initialize2)();
-    struct move_t (*play2)();
-    void (*finalize2)();
-
-    client2 = dlopen("./install/client2.so", RTLD_LAZY);
-    initialize2 = dlsym(client2, "initialize");
-    play2 = dlsym(client2, "play");
-    finalize2 = dlsym(client2, "finalize");
-
-    get_player_name__test(get_player_name);
-    initialize__test(initialize);
-    finalize__test(finalize);
-    play__test(initialize, play, finalize, initialize2, play2, finalize2);
-
-    dlclose(client);
-
-    dlclose(client2);
-
-    return EXIT_SUCCESS;
 }
