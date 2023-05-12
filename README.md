@@ -18,8 +18,8 @@
 
 ## Description du projet
 Ce projet a pour but de nous initier au développement client/serveur en créant une copie du [jeu des amazones](https://en.wikipedia.org/wiki/Game_of_the_Amazons) respectant ce modèle. L'objectif étant d'obtenir un serveur ainsi que des joueurs afin de les confronter à ceux des autres groupe de projet, tout en respectant les règles du jeu.
-Il répond au [sujet Amazons](https://www.labri.fr/perso/renault/working/teaching/projets/2022-23-S6-C-Amazons.php) réalisé dans le cadre d'un projet du semestre 6 proposés aux étudiants de l'ENSEIRB-MATMECA.
-Le dépot est disponible sur la [forge de l'école](
+Il répond au [sujet Amazons](https://www.labri.fr/perso/renault/working/teaching/projets/2022-23-S6-C-Amazons.php) réalisé dans le cadre d'un projet du semestre 6 proposé aux étudiants de l'ENSEIRB-MATMECA.
+Le dépôt est disponible sur la [forge de l'école](
 https://thor.enseirb-matmeca.fr/ruby/projects/projetss6-amaz).
 
 ## Prérequis 
@@ -57,9 +57,9 @@ make all
 
 ### Execution
 
-Plusieurs options sont disponibles lors de l'éxecution, si les arguments des options sont incorrectes, le programme prendra en compte les valeurs par défaut. 
+Plusieurs options sont disponibles lors de l'exécution, si les arguments des options sont incorrectes, le programme prendra en compte les valeurs par défaut. 
 ```sh
--m - <entier>: Fixe la taille des coté du plateau.(par defaut : 5)
+-m - <entier>: Fixe la taille des côtés du plateau.(par defaut : 5)
 
 -t - <t/8>: choisit le type de plateau. (par defaut le plateau classique est choisit)
 ```
@@ -90,7 +90,7 @@ Ils peuvent être exécutés avec la commande :
 
 ### Rapport 
 
-Un rapport LaTeX est disponnible, il peut être compilé dans le fichier `doc/` en utilisant `pdflatex` :
+Un rapport LaTeX est disponible, il peut être compilé dans le fichier `doc/` en utilisant `pdflatex` :
 ```sh
 cd doc/
 pdflatex report.tex
@@ -104,10 +104,10 @@ make clean
 
 ## Contact
 
-- Cattarin Antton : acattarin@enseirb-matmeca.fr
-- [Durand Arthur](https://www.linkedin.com/in/arthur-durand-50384a24b/) : adurand015@enseirb-matmeca.fr
-- [Hamouche Luxel](https://www.linkedin.com/in/luxel-hamouche/) : lhamouche@enseirb-matmeca.fr
-- Robert Joachim : jrobert003@enseirb-matmeca.fr
+- CATTARIN Antton : acattarin@enseirb-matmeca.fr
+- [DURAND Arthur](https://www.linkedin.com/in/arthur-durand-50384a24b/) : adurand015@enseirb-matmeca.fr
+- [HAMOUCHE Luxel](https://www.linkedin.com/in/luxel-hamouche/) : lhamouche@enseirb-matmeca.fr
+- ROBERT Joachim : jrobert003@enseirb-matmeca.fr
 
 ## Remerciements
 
