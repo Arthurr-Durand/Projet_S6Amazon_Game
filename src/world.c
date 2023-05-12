@@ -5,17 +5,17 @@ gsl_spmatrix_uint* graph_init(int m, enum type_world t)
     gsl_spmatrix_uint* mat;
     switch (t) {
     case SQUARED:
-        mat = squared_graph(m,0);
+        mat = squared_graph(m);
         break;
-    case DONUT:
-        mat = squared_graph(m,1);
-        break;
-    case CLOVER:
-        // mat = clover_graph(m);
-        break;
-    case EIGHT:
-        // mat = eight_graph(m);
-        break;
+    // case DONUT:
+    //     mat = donut_graph(m);
+    //     break;
+    // case CLOVER:
+    //     mat = clover_graph(m);
+    //     break;
+    // case EIGHT:
+    //     mat = eight_graph(m);
+    //     break;
     }
     return mat;
 }
@@ -23,7 +23,7 @@ gsl_spmatrix_uint* graph_init(int m, enum type_world t)
 /*
   Créé une matrice d'adjacence de taille (m*m)*(m*m)
 */
-gsl_spmatrix_uint* squared_graph(int size,int donnut)
+gsl_spmatrix_uint* squared_graph(int size)
 {
     gsl_spmatrix_uint* mat = gsl_spmatrix_uint_alloc(size * size, size * size);
 
@@ -50,37 +50,7 @@ gsl_spmatrix_uint* squared_graph(int size,int donnut)
             }
         }
     }
-    if (donnut == 1 ){
-        printf("en cours de developpement \n");
-    //     int cut = size/2;
-    //     int R = cut%2;
-    //     int Q = cut/2;
-    //     for(int i = Q+R-1;i<size-(R+Q)+1;i++){
-    //         for(int j = Q+R-1;j<size-(R+Q)+1;j++){
-    //             int index_i_j = i* size + j;
-    //             if(i<Q+R){
-    //                 if(j>Q+R-1 && j<size-(R+Q))
-    //                     gsl_spmatrix_uint_set(mat, index_i_j, (i + 1) * size + j, NO_DIR);
-    //                 if(j>Q+R)    
-    //                     gsl_spmatrix_uint_set(mat, index_i_j, (i + 1) * size + j - 1, NO_DIR);
-    //                 if(j<size-(Q+R)-1)
-    //                     gsl_spmatrix_uint_set(mat, index_i_j, (i + 1) * size + j + 1, NO_DIR);
-    //             }
-    //             if (i>size-(R+Q)-1){
-    //                 if (j>Q+R-1 && j<size-(R+Q))
-    //                     gsl_spmatrix_uint_set(mat, index_i_j, (i - 1) * size + j, NO_DIR);
-    //                 if (j > Q+R)
-    //                     gsl_spmatrix_uint_set(mat, index_i_j, (i - 1) * size + j - 1, NO_DIR);
-    //                 if (j < size - (R+Q)-1)
-    //                     gsl_spmatrix_uint_set(mat, index_i_j, (i - 1) * size + j + 1, NO_DIR);
-    //             }
-    //             if (j<size-(Q+R))
-    //                 gsl_spmatrix_uint_set(mat, index_i_j, i * size + j + 1, NO_DIR);
-    //             if (j>Q+R-1)
-    //                 gsl_spmatrix_uint_set(mat, index_i_j, i * size + j - 1, NO_DIR);
-    //         }
-    //     }
-    }
+    
     gsl_spmatrix_uint* csr = gsl_spmatrix_uint_compress(mat, GSL_SPMATRIX_CSR);
     gsl_spmatrix_uint_free(mat);
 
