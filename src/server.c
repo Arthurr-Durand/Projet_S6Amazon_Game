@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 
     printf("[-] Client 1 loading\n");
     
-    player_1 = dlopen("./install/client1.so", RTLD_LAZY);
+    player_1 = dlopen(argv[argc - 2], RTLD_LAZY);
     if (!player_1) {
         fputs(dlerror(), stderr);
         exit(1);
@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
 
     printf("[-] Client 2 loading\n");
     
-    player_2 = dlopen("./install/client2.so", RTLD_LAZY);
+    player_2 = dlopen(argv[argc - 1], RTLD_LAZY);
     if (!player_1) {
         fputs(dlerror(), stderr);
         exit(1);
@@ -92,13 +92,13 @@ int main(int argc, char* argv[])
             break;
         case 't':
             if (strcmp(optarg, "d") == 0) {
-                w_type = DONUT;
+                printf("Le graphe donut n'a pas été implémenté ; le graphe sera carré\n");
             }
             if (strcmp(optarg, "t") == 0) {
-                w_type = CLOVER;
+                printf("Le graphe trèfle n'a pas été implémenté ; le graphe sera carré\n");
             }
             if (strcmp(optarg, "8") == 0) {
-                w_type = EIGHT;
+                printf("Le graphe en huit n'a pas été implémenté ; le graphe sera carré\n");
             }
             break;
         }
