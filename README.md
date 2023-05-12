@@ -64,14 +64,8 @@ Plusieurs options sont disponibles lors de l'éxecution, si les arguments des op
 -t - <t/8>: choisit le type de plateau. (par defaut le plateau classique est choisit)
 ```
 Elle sont à spécifier après le nom de l'exécutable, disponible dans le fichier `install`.
-
-En plus de cela, les deux fichiers clients à compiler doivent être indiqués.
 ```sh
-./install/<client1>.so
-./install/<client2>.so
-```
-```sh
-./install/server [Options] ./install/<client1>.so ./install/<client2>.so
+./install/server [Options]
 ```
 
 ### Tests
