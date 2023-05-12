@@ -7,7 +7,7 @@
 >- [Installation](#installation)
 >- [Utilisation](#utilisation)
 >    - [Compilation](#compilation)
->    - [Execution](#execution)
+>    - [Exécution](#execution)
 >    - [Tests](#tests)
 >    - [Rapport](#rapport)
 >    - [Nettoyage](#nettoyage)
@@ -17,14 +17,14 @@
 --- 
 
 ## Description du projet
-Ce projet a pour but de nous initier au développement client/serveur en créant une copie du [jeu des amazones](https://en.wikipedia.org/wiki/Game_of_the_Amazons) respectant ce modèle. L'objectif étant d'obtenir un serveur ainsi que des joueurs afin de les confronter à ceux des autres groupe de projets tout en respectant les règles du jeu.
+Ce projet a pour but de nous initier au développement client/serveur en créant une copie du [jeu des amazones](https://en.wikipedia.org/wiki/Game_of_the_Amazons) respectant ce modèle. L'objectif étant d'obtenir un serveur ainsi que des joueurs afin de les confronter à ceux des autres groupe de projet, tout en respectant les règles du jeu.
 Il répond au [sujet Amazons](https://www.labri.fr/perso/renault/working/teaching/projets/2022-23-S6-C-Amazons.php) réalisé dans le cadre d'un projet du semestre 6 proposés aux étudiants de l'ENSEIRB-MATMECA.
 Le dépot est disponible sur la [forge de l'école](
 https://thor.enseirb-matmeca.fr/ruby/projects/projetss6-amaz).
 
 ## Prérequis 
 
-Ce projet necessite l'installation de  `git`, `make`, `gcc` ainsi que le paquet `libgsl23` pour acceder à la librairie GSL.
+Ce projet nécessite l'installation de  `git`, `make`, `gcc` ainsi que le paquet `libgsl23` pour accéder à la librairie GSL.
 ```sh
 sudo apt-get install git
 sudo apt-get install make
@@ -33,7 +33,7 @@ sudo apt-get install libgsl23
 ```
 ## Installation
 
-Avant de commencer, il est neccessaire de cloner le dépot git disponible sur la forge de l'ENSEIRB-MATMECA.
+Avant de commencer, il est nécessaire de cloner le dépot git disponible sur la forge de l'ENSEIRB-MATMECA.
 ```sh
 git clone https://<user>@thor.enseirb-matmeca.fr/git/projetss6-amaz-19042
 cd projetss6-amaz-19042
@@ -44,8 +44,8 @@ cd projetss6-amaz-19042
 
 ### Compilation
 
-Par defaut, le chemin vers la bibliothèque GSL est celui compatible avec les machines de l'école mais le `Makefile` est paramétré pour trouver lui même le chemin.
-Cependant, si le chemin n'est pas trouvé, il est possible d'indiquer le repertoire manuellement en ajoutant le paramètre suivant à chaque utilisation de `make` :
+Par défaut, le chemin vers la bibliothèque GSL est celui compatible avec les machines de l'école mais le `Makefile` est paramétré pour trouver lui même le chemin.
+Cependant, si le chemin n'est pas trouvé, il est possible d'indiquer le répertoire manuellement en ajoutant le paramètre suivant à chaque utilisation de `make` :
 ```sh
 make <commande> GSL_PATH=<your own path>
 ```
@@ -63,16 +63,22 @@ Plusieurs options sont disponibles lors de l'éxecution, si les arguments des op
 
 -t - <t/8>: choisit le type de plateau. (par defaut le plateau classique est choisit)
 ```
-Elle sont à spécifier après le nom de l'executable, disponible dans le fichier `install`.
+Elle sont à spécifier après le nom de l'exécutable, disponible dans le fichier `install`.
+
+En plus de cela, les deux fichiers clients à compiler doivent être indiqués.
 ```sh
-./install/server [Options]
+./install/<client1>.so
+./install/<client2>.so
+```
+```sh
+./install/server [Options] ./install/<client1>.so ./install/<client2>.so
 ```
 
 ### Tests
 
 Des tests sont disponibles afin de vérifier le bon fonctionnement de chaque partie du projet.
 
-Le tests peuvent être compilés avec la ligne suivante :
+Les tests peuvent être compilés avec la ligne suivante :
 ```sh
 make test
 ```
