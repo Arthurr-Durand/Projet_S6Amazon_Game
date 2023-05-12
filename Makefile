@@ -13,26 +13,20 @@ server:
 	$(CC) $(CFLAGS) -o install/server src/server.c src/world.c src/tools.c src/move_server.c src/game.c $(LDFLAGS)
 
 client:
-	mkdir -p install
 	$(CC) $(CFLAGS) -shared -o install/client1.so src/player_1.c
 	$(CC) $(CFLAGS) -shared -o install/client2.so src/player_2.c
 
-alltests: client
-#	$(CC) $(CFLAGS) -o  install/alltests tst/test_client1.c tst/test_move_server.c src/world.c src/move_server.c $(LDFLAGS) -I src/ -ldl --coverage -lgcov
-#   $(CC) $(CFLAGS) -o  install/alltests tst/test_move_server.c src/world.c src/move_server.c $(LDFLAGS) -I src/ -ldl --coverage -lgcov
-#	$(CC) $(CFLAGS) -o  install/alltests tst/test_world.c src/world.c $(LDFLAGS) -I src/ -ldl --coverage -lgcov
-	$(CC) $(CFLAGS) -o  install/alltests tst/test_game.c src/world.c src/move_server.c src/game.c $(LDFLAGS) -I src/ -ldl --coverage -lgcov
+alltests: build
+	$(CC) $(CFLAGS) -o install/test_client1 tst/test_client1.c src/move_server.c src/world.c $(LDFLAGS) -I src/ -ldl --coverage -lgcov
+	$(CC) $(CFLAGS) -o install/test_game tst/test_game.c src/game.c src/move_server.c src/world.c $(LDFLAGS) -I src/ -ldl --coverage -lgcov
+	$(CC) $(CFLAGS) -o install/test_move_server tst/test_move_server.c src/move_server.c src/world.c $(LDFLAGS) -I src/ -ldl --coverage -lgcov
+	$(CC) $(CFLAGS) -o install/test_world tst/test_world.c src/world.c $(LDFLAGS) -I src/ -ldl --coverage -lgcov
 
 test: alltests
-
-runtest: clean test
-	./install/alltests
-
-runserver: build
-	./install/server
-
-run: all
-	./install/server ./install/client1.so ./install/client2.so
+	./install/test_client1	
+	./install/test_game
+	./install/test_move_server
+	./install/test_world
 
 install: server client test
 

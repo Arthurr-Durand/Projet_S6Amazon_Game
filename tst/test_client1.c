@@ -30,7 +30,7 @@ int is_arrow(unsigned int arrows[], unsigned int arrows_number, unsigned int pos
     return 0;
 }
 
-void print_game(int width, unsigned int* queens[], unsigned int num_queens, unsigned int arrows[], unsigned int arrows_number)
+void game__test(int width, unsigned int* queens[], unsigned int num_queens, unsigned int arrows[], unsigned int arrows_number)
 {
     for (int j = 0; j < width; j++) {
         for (int i = 0; i < width; i++) {
@@ -46,16 +46,16 @@ void print_game(int width, unsigned int* queens[], unsigned int num_queens, unsi
     printf("\n");
 }
 
-void test_get_player_name(char const* (*get_player_name)())
+void get_player_name__test(char const* (*get_player_name)())
 {
     printf("\t%s", __func__);
 
     assert(!strcmp((*get_player_name)(), "ArThUr"));
     
-    printf("\tOK\n");
+    printf("\t\tOK\n");
 }
 
-void test_initialize(void (*initialize)())
+void initialize__test(void (*initialize)())
 {
     printf("\t%s", __func__);
 
@@ -84,16 +84,16 @@ void test_initialize(void (*initialize)())
     printf("\t\tOK\n");
 }
 
-void test_finalize(void (*finalize)())
+void finalize__test(void (*finalize)())
 {
     printf("\t%s", __func__);
 
     (*finalize)();
 
-    printf("\t\tOK\n");
+    printf("\t\t\tOK\n");
 }
 
-void test_play(void (*initialize)(), struct move_t (*play)(), void (*finalize)(), void (*initialize2)(), struct move_t (*play2)(), void (*finalize2)())
+void play__test(void (*initialize)(), struct move_t (*play)(), void (*finalize)(), void (*initialize2)(), struct move_t (*play2)(), void (*finalize2)())
 {
     printf("\t%s", __func__);
 
@@ -120,7 +120,7 @@ void test_play(void (*initialize)(), struct move_t (*play)(), void (*finalize)()
     struct move_t previous_move = { -1, -1, -1 };
     int max_turn = 5;
 
-    printf("\n");
+    // printf("\n");
 
     while (max_turn) {
         previous_move = (*play)(previous_move);
@@ -134,8 +134,8 @@ void test_play(void (*initialize)(), struct move_t (*play)(), void (*finalize)()
             }
         }
 
-        printf("Player 0 move queen from (%d) to (%d) and shoot to (%d).\n", previous_move.queen_src, previous_move.queen_dst, previous_move.arrow_dst);
-        print_game(width, queens, num_queens, arrows, arrows_number);
+        // printf("Player 0 move queen from (%d) to (%d) and shoot to (%d).\n", previous_move.queen_src, previous_move.queen_dst, previous_move.arrow_dst);
+        // print_game(width, queens, num_queens, arrows, arrows_number);
 
         previous_move = (*play2)(previous_move);
         arrows_number++;
@@ -148,8 +148,8 @@ void test_play(void (*initialize)(), struct move_t (*play)(), void (*finalize)()
             }
         }
 
-        printf("Player 1 move queen from (%d) to (%d) and shoot to (%d).\n", previous_move.queen_src, previous_move.queen_dst, previous_move.arrow_dst);
-        print_game(width, queens, num_queens, arrows, arrows_number);
+        // printf("Player 1 move queen from (%d) to (%d) and shoot to (%d).\n", previous_move.queen_src, previous_move.queen_dst, previous_move.arrow_dst);
+        // print_game(width, queens, num_queens, arrows, arrows_number);
 
         max_turn--;
     }
@@ -163,7 +163,7 @@ void test_play(void (*initialize)(), struct move_t (*play)(), void (*finalize)()
     (*finalize)();
     (*finalize2)();
 
-    printf("\t\tOK\n");
+    printf("\t\t\tOK\n");
 }
 
 int main()
@@ -192,10 +192,10 @@ int main()
     play2 = dlsym(client2, "play");
     finalize2 = dlsym(client2, "finalize");
 
-    test_get_player_name(get_player_name);
-    test_initialize(initialize);
-    test_finalize(finalize);
-    test_play(initialize, play, finalize, initialize2, play2, finalize2);
+    get_player_name__test(get_player_name);
+    initialize__test(initialize);
+    finalize__test(finalize);
+    play__test(initialize, play, finalize, initialize2, play2, finalize2);
 
     dlclose(client);
 

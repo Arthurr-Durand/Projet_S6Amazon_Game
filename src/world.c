@@ -146,7 +146,9 @@ void free_world(struct world_t* world)
     free(world);
 }
 
-const char* board_thing[4] = {"\u25A1","\u2686","\u2688","\u2915"};
+// const char* board_thing[4] = {"\u25A1","\u2686","\u2688","\u2915"};
+const char* board_thing[4] = {"\u00B7","\u2655","\u265b","\u25a0"};
+// const char* board_thing[4] = {"\u25A1","\u2655","\u265b","\u25a0"};
 
 /*
   c'est dans le nom de la fonction XD

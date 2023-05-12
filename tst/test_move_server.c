@@ -7,7 +7,7 @@
 
 void moves_add__test()
 {
-    printf("%s", __func__);
+    printf("\t%s", __func__);
 
     struct move_t move = {-1, -1 , -1};
     struct moves_t* moves = malloc(sizeof(struct moves_t));
@@ -23,12 +23,12 @@ void moves_add__test()
 
     free_moves(moves);
 
-    printf("\tOK\n");
+    printf("\t\t\tOK\n");
 }
 
 void not_in_world__test()
 {
-    printf("%s", __func__);
+    printf("\t%s", __func__);
 
     struct move_t move = {-1, -1, -1};
     assert(not_in_world(9, move) == 1);
@@ -60,12 +60,12 @@ void not_in_world__test()
     move.queen_dst = -1;
     assert(not_in_world(9, move) == 1);
 
-    printf("\tOK\n");
+    printf("\t\tOK\n");
 }
 
 void get_direction__test()
 {
-    printf("%s", __func__);
+    printf("\t%s", __func__);
 
     assert(get_direction(3, 0, 2) == DIR_EAST);
     assert(get_direction(3, 0, 4) == DIR_SE);
@@ -80,12 +80,12 @@ void get_direction__test()
     assert(get_direction(3, 7, 1) == DIR_NORTH);
     assert(get_direction(3, 2, 6) == DIR_SW);
 
-    printf("\tOK\n");
+    printf("\t\tOK\n");
 }
 
 void obstacle__test()
 {
-    printf("%s", __func__);
+    printf("\t%s", __func__);
 
     struct graph_t graph = { 25, graph_init(5, SQUARED) };
 
@@ -107,12 +107,12 @@ void obstacle__test()
     gsl_spmatrix_uint_free(graph.t);
     free_world(world);
 
-    printf("\tOK\n");
+    printf("\t\t\tOK\n");
 }
 
 void is_move_valid__test()
 {
-    printf("%s", __func__);
+    printf("\t%s", __func__);
 
     struct graph_t graph = { 25, graph_init(5, SQUARED) };
 
@@ -132,12 +132,12 @@ void is_move_valid__test()
     gsl_spmatrix_uint_free(graph.t);
     free_world(world);
 
-    printf("\tOK\n");
+    printf("\t\tOK\n");
 }
 
 void exists_neighbor__test()
 {
-    printf("%s", __func__);
+    printf("\t%s", __func__);
 
     struct graph_t graph = { 25, graph_init(5, SQUARED) };
 
@@ -148,7 +148,7 @@ void exists_neighbor__test()
 
     gsl_spmatrix_uint_free(graph.t);
 
-    printf("\tOK\n");
+    printf("\t\tOK\n");
 }
 
 int main()

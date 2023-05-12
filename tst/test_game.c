@@ -10,19 +10,19 @@
 
 void start_player__test(struct player* player1, struct player* player2)
 {
-    printf("%s", __func__);
+    printf("\t%s", __func__);
  
     struct player* current_player = start_player(player1, player2);
 
     player1->color = (player1->get_player_name() == current_player->get_player_name()) ? BLACK : WHITE;
     player2->color = (player2->get_player_name() == current_player->get_player_name()) ? BLACK : WHITE;
  
-    printf("\tOK\n");
+    printf("\t\tOK\n");
 }
 
 void compute_next_player__test(struct player* player1, struct player* player2)
 {
-    printf("%s", __func__);
+    printf("\t%s", __func__);
 
     assert(compute_next_player(player1, player1, player2) == player2);
     assert(compute_next_player(player2, player1, player2) == player1);
@@ -32,7 +32,7 @@ void compute_next_player__test(struct player* player1, struct player* player2)
 
 void sort_to_player_color__test()
 {
-    printf("%s", __func__);
+    printf("\t%s", __func__);
 
     assert(sort_to_player_color(B_QUEEN) == BLACK);
     assert(sort_to_player_color(W_QUEEN) == WHITE);
@@ -42,7 +42,7 @@ void sort_to_player_color__test()
 
 void player_color_to_sort__test()
 {
-    printf("%s", __func__);
+    printf("\t%s", __func__);
 
     assert(player_color_to_sort(BLACK) == B_QUEEN);
     assert(player_color_to_sort(WHITE) == W_QUEEN);
@@ -52,7 +52,7 @@ void player_color_to_sort__test()
 
 void am_i_wining__test()
 {
-    printf("%s", __func__);
+    printf("\t%s", __func__);
 
     struct graph_t graph = { 25, graph_init(5, SQUARED) };
     struct world_t* world = world_init(5);
@@ -88,8 +88,8 @@ void am_i_wining__test()
     world_set(world, 17, W_QUEEN);
     world_set(world, 21, W_QUEEN);
 
-    printf("\n");
-    print_world(world);
+    // printf("\n");
+    // print_world(world);
 
     assert(am_i_winning(world, &graph, BLACK, queens, 4) == 0);
     assert(am_i_winning(world, &graph, WHITE, queens, 4) == 1);
@@ -98,7 +98,7 @@ void am_i_wining__test()
     free_queens(queens);
     gsl_spmatrix_uint_free(graph.t);
 
-    printf("\tOK\n");
+    printf("\t\tOK\n");
 }
 
 int main()

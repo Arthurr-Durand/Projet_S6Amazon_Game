@@ -8,7 +8,7 @@
 
 void world_init__test()
 {
-    printf("%s", __func__);
+    printf("\t%s", __func__);
 
     struct world_t* world = world_init(5);
 
@@ -20,12 +20,12 @@ void world_init__test()
 
     free_world(world);
 
-    printf("\tOK\n");
+    printf("\t\tOK\n");
 }
 
 void world_set__test()
 {
-    printf("%s", __func__);
+    printf("\t%s", __func__);
 
     struct world_t* world = world_init(5);
 
@@ -38,12 +38,12 @@ void world_set__test()
 
     free_world(world);
 
-    printf("\tOK\n");
+    printf("\t\t\tOK\n");
 }
 
 void world_get__test()
 {
-    printf("%s", __func__);
+    printf("\t%s", __func__);
 
     struct world_t* world = world_init(5);
 
@@ -56,12 +56,12 @@ void world_get__test()
 
     free_world(world);
 
-    printf("\tOK\n");
+    printf("\t\t\tOK\n");
 }
 
 void compute_queens_pos__test()
 {
-    printf("%s", __func__);
+    printf("\t%s", __func__);
 
     struct world_t* world = world_init(5);
 
