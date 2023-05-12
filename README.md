@@ -44,11 +44,16 @@ cd projetss6-amaz-19042
 
 ### Compilation
 
-Par defaut, le chemin (GSL_PATH) est celui compatible avec les machines de l'école. Cependant il est possible compiler sur ca machine en faisant :
+Par defaut, le chemin vers la bibliothèque GSL est celui compatible avec les machines de l'école mais le `Makefile` est paramétré pour trouver lui même le chemin.
+Cependant, si le chemin n'est pas trouvé, il est possible d'indiquer le repertoire manuellement en ajoutant le paramètre suivant à chaque utilisation de `make` :
 ```sh
-make run GSL_PATH=<your own path>
+make <commande> GSL_PATH=<your own path>
 ```
-une fois la compilation effectuer un executable est créé dans le dossier install sous le nom de serveur.
+
+Le serveur et les clients peuvent être compilés avec la ligne suivante :
+```sh
+make all
+```
 
 ### Execution
 
@@ -58,18 +63,22 @@ Plusieurs options sont disponibles lors de l'éxecution, si les arguments des op
 
 -t - <t/8>: choisit le type de plateau. (par defaut le plateau classique est choisit)
 ```
-Elle sont à spécifier après le nom de l'executable.
+Elle sont à spécifier après le nom de l'executable, disponible dans le fichier `install`.
 ```sh
 ./install/server [Options]
 ```
 
 ### Tests
 
-Des tests sont disponible afin de vérifier le bon fonctionnement de chaque partie du projet.
-Pour les executer il suffit de faire :
-```sh
-make alltests
+Des tests sont disponibles afin de vérifier le bon fonctionnement de chaque partie du projet.
 
+Le tests peuvent être compilés avec la ligne suivante :
+```sh
+make test
+```
+
+Ils peuvent être exécutés avec la commande :
+```sh
 ./install/alltests
 ```
 
@@ -82,7 +91,7 @@ pdflatex report.tex
 ```
 
 ### Nettoyage 
-Les fichiers créés lors de la compilation peuvent être supprimé en utilisant : 
+Les fichiers créés lors de la compilation peuvent être supprimés en utilisant : 
 ```sh
 make clean
 ```
